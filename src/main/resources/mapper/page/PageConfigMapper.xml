@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ring.server.jsoup.mvc.dao.page.PageCofigMapper">
+	<!-- 增加 -->
+	<insert id="add" parameterType="ring.server.jsoup.mvc.model.page.PageConfig">
+		INSERT INTO page_config (id,cnName,enName,isDownload,localpath,
+		listUrlPattern,detailUrlPattern,imageAttr,imageGet,magnetGet,
+		lastPageGet,lastPageAttr,lastPagePattern,index)
+		VALUES(#{id},#{cnName},#{enName},#{isDownload},#{localpath},
+		#{listUrlPattern},#{detailUrlPattern},#{imageAttr},#{imageGet},#{magnetGet},
+		#{lastPageGet},#{lastPageAttr},#{lastPagePattern},#{index})
+	</insert>
+
+	<!-- 根据ID查询 -->
+	<select id="get" resultType="ring.server.jsoup.mvc.model.page.PageConfig" resultMap="pageConfigResultMap">
+		SELECT * FROM page_config t
+		WHERE t.enName = #{enName}
+	</select>
+
+	<!-- 映射 -->
+	<resultMap type="ring.server.jsoup.mvc.model.page.PageConfig" id="pageConfigResultMap">
+		<result property="id" column="id" />
+		<result property="cnName" column="cnName" />
+		<result property="enName" column="enName" />
+		<result property="isDownload" column="isDownload" />
+		<result property="localpath" column="localpath" />
+		<result property="listUrlPattern" column="listUrlPattern" />
+		<result property="detailUrlPattern" column="detailUrlPattern" />
+		<result property="imageAttr" column="imageAttr" />
+		<result property="imageGet" column="imageGet" />
+		<result property="magnetGet" column="magnetGet" />
+		<result property="lastPageGet" column="lastPageGet" />
+		<result property="lastPageAttr" column="lastPageAttr" />
+		<result property="lastPagePattern" column="lastPagePattern" />
+		<result property="index" column="index" />
+	</resultMap>
+</mapper>
