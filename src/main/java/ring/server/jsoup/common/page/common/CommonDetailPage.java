@@ -29,16 +29,18 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	private String fid;
 	private String curpage;
+	private String tid;
 	private String url;
 	private String title;
 	private PageConfig pageConfig;
 	private PageDetailServiceImpl pageDetailServiceImpl;
 	
-	public CommonDetailPage(String fid, String curpage, String url,String title,
+	public CommonDetailPage(String fid, String curpage,String tid, String url,String title,
 			PageConfig pageConfig,PageDetailServiceImpl pageDetailServiceImpl) {
 		super();
 		this.fid = fid;
 		this.curpage = curpage;
+		this.tid = tid;
 		this.url = url;
 		this.title = title;
 		this.pageConfig = pageConfig;
@@ -64,7 +66,7 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 		pageDetail.setSource(pageConfig.getEnName());
 		
 		//线程名称
-		Thread.currentThread().setName("FID_"+fid+"_PAGE_"+curpage);
+		Thread.currentThread().setName("FID_"+fid+"_PAGE_"+curpage+"_TID="+tid);
 		logger.info("开始执行，"+url);
 
 		try {
@@ -101,15 +103,22 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 			}
 			pageDetail.setTitle(title);
 			
-			//默认最后一个盘符
-			File[] roots = File.listRoots();
+			//指定下载目录
 			String rootFile = null;
-			for(int i=roots.length-1;i>0;i--){
-				if(roots[i].exists()&&roots[i].getFreeSpace()>0){
-					rootFile = roots[i].getPath();
+			if(StringUtils.isEmpty(pageConfig.getLocalpath())){				
+				//默认最后一个盘符
+				File[] roots = File.listRoots();
+				for(int i=roots.length-1;i>0;i--){
+					if(roots[i].exists()&&roots[i].getFreeSpace()>0){
+						rootFile = roots[i].getPath()+"temp\\";
+						break;
+					}
 				}
+			}else{
+				rootFile = pageConfig.getLocalpath();
 			}
-			String outputpath = rootFile+"temp\\"+targetFold+"\\"+title+"\\";
+			
+			String outputpath = rootFile+targetFold+(StringUtils.isEmpty(pageDetail.getSort())?"":"\\"+pageDetail.getSort()+"\\")+"\\"+title+"\\";
 			
 			//3.图片下载
 			Elements imgs = doc.getElementsByAttribute(pageConfig.getImageGet());
@@ -119,8 +128,13 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 			
 			//4.磁力链接下载
 			Elements as = doc.getElementsByTag(pageConfig.getMagnetGet());
-			String magnet = jsoupUtil.magnetText(as, outputpath+"\\magnet.txt",pageConfig.isDownload());
+			String magnet = jsoupUtil.elementsText(as, outputpath+"\\magnet.txt",Pattern.compile("magnet.*"),pageConfig.isDownload());
 			pageDetail.setMagnet(magnet);
+			
+			//种子链接下载
+			Elements torrentAs = doc.getElementsByTag(pageConfig.getTorrentGet());
+			String torrent = jsoupUtil.elementsText(torrentAs, outputpath+"\\torrent.txt",Pattern.compile("http\\://www\\.viidii\\.info.*"),pageConfig.isDownload());
+			pageDetail.setTorrent(torrent);
 			
 			//保存到数据库
 			pageDetailServiceImpl.add(pageDetail);

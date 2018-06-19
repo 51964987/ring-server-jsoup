@@ -1,5 +1,8 @@
 package ring.server.jsoup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +10,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import ring.server.jsoup.common.page.common.CommonDetailPage;
+import ring.server.jsoup.common.page.common.CommonIndex;
 import ring.server.jsoup.common.page.common.CommonListPage;
 import ring.server.jsoup.common.page.common.CommonPagination;
+import ring.server.jsoup.mvc.dao.page.PageListMapper;
 import ring.server.jsoup.mvc.model.page.PageConfig;
+import ring.server.jsoup.mvc.model.page.PageList;
 import ring.server.jsoup.mvc.service.page.PageConfigServiceImpl;
 import ring.server.jsoup.mvc.service.page.PageDetailServiceImpl;
 
@@ -21,6 +27,8 @@ public class JsoupApplicationTest {
 	PageDetailServiceImpl pageDetailServiceImpl;
 	@Autowired
 	PageConfigServiceImpl pageConfigServiceImpl;
+	@Autowired
+	PageListMapper pageListMapper;
 	
 
 	@Test
@@ -49,7 +57,7 @@ public class JsoupApplicationTest {
 	@Test
 	public void detailPageTest(){
 		
-		String url = "https://cl.uozvy.com/htm_data/7/1805/3139775.html";
+		String url = "https://cl.wy8.info/htm_data/7/1804/3123306.html";
 		try {
 			PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
 			new CommonDetailPage(url,pageConfig,pageDetailServiceImpl).call();
@@ -62,10 +70,24 @@ public class JsoupApplicationTest {
 	@Test
 	public void listPageTest(){
 		
-		String url = "https://cl.uozvy.com/thread0806.php?fid=16&search=&page=1";
+		String url = "https://cl.wy8.info/thread0806.php?fid=7&search=&page=13";
 		try {
-			PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
-			new CommonListPage(url, pageConfig, pageDetailServiceImpl).call();
+			//PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
+			List<PageList> list = new ArrayList<>();
+			new CommonListPage(url,list).call();
+			pageListMapper.addTempTable();
+			if(list.size()>0){
+				//System.out.println(JSON.toJSONString(list));
+				pageListMapper.addList(list);
+			}else{
+				System.err.println("没有数据");
+			}
+			//logger.info("批量插入或更新正式表");
+			pageListMapper.addByTempTable();
+			//logger.info("睡眠前时间");
+			Thread.sleep(10*1000);
+			//logger.info("睡眠后时间");
+			pageListMapper.updateByTempTable();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -75,9 +97,21 @@ public class JsoupApplicationTest {
 	@Test
 	public void paginationTest(){
 		
-		String url = "https://cl.uozvy.com/thread0806.php?fid=16&search=&page=1";
+		String url = "https://cl.wy8.info/thread0806.php?fid=7&search=&page=1";
 		try {
-			new CommonPagination(url,pageConfigServiceImpl,pageDetailServiceImpl).call();
+			new CommonPagination(url,pageConfigServiceImpl,pageListMapper).call();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Test
+	public void CommonIndexTest(){
+		
+		String url = "https://cl.wy8.info/index.php";
+		try {
+			new CommonIndex(url,pageConfigServiceImpl,pageListMapper).call();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

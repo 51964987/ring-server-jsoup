@@ -28,26 +28,21 @@ public class DownloadUtil {
 	int threadNum = 5;
 	
 	/**
-	 * 磁力连接字符串,回车符隔开
+	 * 根据pattern匹配，获取文本字符串
 	 * @param as
 	 * @param outputFilePath
+	 * @param pattern
 	 * @param isDownload
+	 * @return
 	 * @throws Exception 
 	 * @author ring
-	 * @date 2018年6月3日 下午11:46:21
+	 * @date 2018年6月16日 下午9:34:05
 	 * @version V1.0
 	 */
-	public String magnetText(Elements as,String outputFilePath,boolean isDownload) throws Exception{
+	public String elementsText(Elements as,String outputFilePath,Pattern pattern,boolean isDownload) throws Exception{
 		StringBuffer sb = new StringBuffer();
 		for(int i=0;i<as.size();i++){
-			
-			//创建目录
-			File file = new File(outputFilePath).getParentFile();
-			if(!file.exists()){
-				file.mkdirs();
-			}
-			
-			Elements item = as.get(i).getElementsMatchingText(Pattern.compile("magnet.*"));
+			Elements item = as.get(i).getElementsMatchingText(pattern);
 			if(item!=null&&item.size()>0){
 				if(sb.length()>0){
 					sb.append("\t\n");
@@ -55,7 +50,14 @@ public class DownloadUtil {
 				sb.append(item.get(0).text());
 			}
 		}
-		if(isDownload){
+		if(isDownload&& sb.toString().length()>0){
+
+			//创建目录
+			File file = new File(outputFilePath).getParentFile();
+			if(!file.exists()){
+				file.mkdirs();
+			}
+			
 			downloadMagnet(sb.toString(), outputFilePath);
 		}
 		return sb.toString();
@@ -120,7 +122,7 @@ public class DownloadUtil {
 				imagesSb.append(src);
 			}
 			
-			if(isDownload){				
+			if(isDownload&&imagesSb.toString().length()>0){				
 				downloadImage(imagesSb.toString(), attrSrc, outputpath);
 			}
 		}		

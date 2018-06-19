@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ring.server.jsoup.common.page.common.CommonPagination;
+import ring.server.jsoup.mvc.dao.page.PageListMapper;
 import ring.server.jsoup.mvc.service.page.PageConfigServiceImpl;
 import ring.server.jsoup.mvc.service.page.PageDetailServiceImpl;
 
@@ -18,11 +19,13 @@ public class PageController {
 	PageDetailServiceImpl pageDetailServiceImpl;
 	@Autowired
 	PageConfigServiceImpl pageConfigServiceImpl;
+	@Autowired
+	PageListMapper pageListMapper;
 	
 	@RequestMapping("exec")
 	public ResponseEntity<Object> exec(String url){
 		try {
-			new CommonPagination(url,pageConfigServiceImpl,pageDetailServiceImpl).call();
+			new CommonPagination(url,pageConfigServiceImpl,pageListMapper).call();
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 		}

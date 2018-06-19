@@ -8,6 +8,7 @@ public class PageDetail implements java.io.Serializable{
 	private String content;
 	private String images;
 	private String magnet;
+	private String torrent;
 	private String source;
 	private String url;
 	private String sort;
@@ -88,6 +89,12 @@ public class PageDetail implements java.io.Serializable{
 	}
 	public void setSort(String sort) {
 		this.sort = sort;
+	}
+	public String getTorrent() {
+		return torrent;
+	}
+	public void setTorrent(String torrent) {
+		this.torrent = torrent;
 	}
 	
 }

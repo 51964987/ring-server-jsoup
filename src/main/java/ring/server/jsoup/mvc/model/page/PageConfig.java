@@ -17,6 +17,8 @@ public class PageConfig implements java.io.Serializable{
 	private String imageGet;		//例如data-src，通过Attr获取所有IMAGE对象
 	private String magnetGet;		//例如a,通过标签a获取所有MAGNET对象
 	private String index;			//首页地址
+	private String torrentGet;		//例如a,通过标签a获取种子对象
+	private String torrentPattern;		//例如以http://www.viidii.info开头
 	
 	public String getId() {
 		return id;
@@ -101,5 +103,17 @@ public class PageConfig implements java.io.Serializable{
 	}
 	public void setIndex(String index) {
 		this.index = index;
+	}
+	public String getTorrentGet() {
+		return torrentGet;
+	}
+	public void setTorrentGet(String torrentGet) {
+		this.torrentGet = torrentGet;
+	}
+	public String getTorrentPattern() {
+		return torrentPattern;
+	}
+	public void setTorrentPattern(String torrentPattern) {
+		this.torrentPattern = torrentPattern;
 	}
 }
