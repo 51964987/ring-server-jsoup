@@ -10,8 +10,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 
-import ring.server.jsoup.common.page.common.CommonIndex;
-
 public class PageListTest {
 	
 	@Test

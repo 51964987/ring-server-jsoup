@@ -5,7 +5,6 @@ import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
@@ -14,6 +13,7 @@ import org.springframework.util.StringUtils;
 
 import ring.server.jsoup.common.page.IDetailPage;
 import ring.server.jsoup.common.util.DownloadUtil;
+import ring.server.jsoup.common.util.HttpUrlUtil;
 import ring.server.jsoup.mvc.model.page.PageConfig;
 import ring.server.jsoup.mvc.model.page.PageDetail;
 import ring.server.jsoup.mvc.service.page.PageDetailServiceImpl;
@@ -85,8 +85,19 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 	    	}
 			
 			//2.请求
-			Document doc = Jsoup.connect(url).get();
-			pageDetail.setContent(doc.getElementsByTag("body").outerHtml());
+			Document doc = HttpUrlUtil.get(url);
+			//pageDetail.setContent(doc.getElementsByTag("body").outerHtml());
+			Elements ths = doc.getElementsByTag("th");
+			if(ths!=null&&ths.size()>0){
+				StringBuffer outerHtmlSb = new StringBuffer();
+				for(int i=0;i<ths.size();i++){
+					Elements content = ths.get(i).getElementsByClass("tpc_content");
+					if(content!=null){
+						outerHtmlSb.append(content.outerHtml());
+					}
+				}
+				pageDetail.setContent(outerHtmlSb.toString());
+			}
 			
 			//1.来源页面
 			String targetFold = "";
@@ -118,7 +129,7 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 				rootFile = pageConfig.getLocalpath();
 			}
 			
-			String outputpath = rootFile+targetFold+(StringUtils.isEmpty(pageDetail.getSort())?"":"\\"+pageDetail.getSort()+"\\")+"\\"+title+"\\";
+			String outputpath = rootFile+targetFold+(StringUtils.isEmpty(pageDetail.getSort())?"":"\\"+pageDetail.getSort()+"\\")+"\\";//+title+"\\";
 			
 			//3.图片下载
 			Elements imgs = doc.getElementsByAttribute(pageConfig.getImageGet());

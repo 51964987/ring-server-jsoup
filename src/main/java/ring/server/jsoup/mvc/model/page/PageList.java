@@ -1,9 +1,15 @@
 package ring.server.jsoup.mvc.model.page;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import ring.server.jsoup.mvc.jsonSerializer.PageListOperSerializer;
+import ring.server.jsoup.mvc.jsonSerializer.PageListTitleSerializer;
+
 public class PageList implements java.io.Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private String id;
+	@JsonSerialize(using=PageListTitleSerializer.class)
 	private String title;
 	private String author;
 	private String createDate;
@@ -12,6 +18,10 @@ public class PageList implements java.io.Serializable{
 	private String fid;
 	private String yearMonth;
 	private String target;
+	private String ts;
+	private String source;
+	@JsonSerialize(using=PageListOperSerializer.class)
+	private String oper;
 	
 	public String getId() {
 		return id;
@@ -67,5 +77,22 @@ public class PageList implements java.io.Serializable{
 	public void setTarget(String target) {
 		this.target = target;
 	}
-	
+	public String getTs() {
+		return ts;
+	}
+	public void setTs(String ts) {
+		this.ts = ts;
+	}
+	public String getSource() {
+		return source;
+	}
+	public void setSource(String source) {
+		this.source = source;
+	}
+	public String getOper() {
+		return oper;
+	}
+	public void setOper(String oper) {
+		this.oper = oper;
+	}
 }

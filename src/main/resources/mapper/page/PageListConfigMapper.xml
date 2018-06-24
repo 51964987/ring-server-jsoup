@@ -3,7 +3,7 @@
 <mapper namespace="ring.server.jsoup.mvc.dao.page.PageCofigMapper">
 	<!-- 增加 -->
 	<insert id="add" parameterType="ring.server.jsoup.mvc.model.page.PageConfig">
-		INSERT INTO page_config (id,cnName,enName,isDownload,localpath,
+		INSERT INTO page_list_config (id,cnName,enName,isDownload,localpath,
 		listUrlPattern,detailUrlPattern,imageAttr,imageGet,magnetGet,
 		lastPageGet,lastPageAttr,lastPagePattern,index)
 		VALUES(#{id},#{cnName},#{enName},#{isDownload},#{localpath},
@@ -13,7 +13,7 @@
 
 	<!-- 根据ID查询 -->
 	<select id="get" resultType="ring.server.jsoup.mvc.model.page.PageConfig" resultMap="pageConfigResultMap">
-		SELECT * FROM page_config t
+		SELECT * FROM page_list_config t
 		WHERE t.enName = #{enName}
 	</select>
 

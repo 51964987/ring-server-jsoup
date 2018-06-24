@@ -3,42 +3,41 @@
 <mapper namespace="ring.server.jsoup.mvc.dao.page.PageListMapper">
 	<!-- 增加 -->
 	<insert id="addList">  
-        REPLACE INTO page_list_temp(id,title,author,clickNum,url,fid,yearMonth,target,createDate)  
+        REPLACE INTO page_list(id,title,author,clickNum,url,fid,yearMonth,target,createDate,ts)  
         VALUES   
         <foreach collection="list" item="emp" separator=",">  
-            (#{emp.id},#{emp.title},#{emp.author},#{emp.clickNum},#{emp.url},#{emp.fid},#{emp.yearMonth},#{emp.target},#{emp.createDate})  
+            (#{emp.id},#{emp.title},#{emp.author},#{emp.clickNum},#{emp.url},#{emp.fid},#{emp.yearMonth},#{emp.target},#{emp.createDate},#{emp.ts})  
         </foreach>  
 	</insert> 
-	<insert id="addTempTable"> 
-		DROP TABLE IF EXISTS page_list_temp; 
-		CREATE TABLE IF NOT EXISTS page_list_temp LIKE page_list;
-	</insert> 
-	<update id="addByTempTable">
-		INSERT INTO page_list
-		SELECT f.* FROM page_list_temp f
-		LEFT JOIN page_list t ON f.id = t.id WHERE t.id IS NULL;
-	</update> 
-	<update id="updateByTempTable">
-		UPDATE page_list t
-		LEFT JOIN  page_list_temp f
-		ON f.id = t.id
-		SET t.title=f.title,t.author=f.author,t.clickNum=f.clickNum,t.url=f.url,t.fid=f.fid,t.yearMonth=f.yearMonth,t.createDate=f.createDate
-		WHERE t.id IS NOT NULL;
-	</update> 
+	
+	<select id="findById" resultMap="pageListMap">
+		SELECT t.*,t.id as oper FROM page_list t
+		WHERE t.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ring.server.jsoup.mvc.model.page.PageList" resultMap="pageListMap">
+		SELECT t.*,t.id as oper FROM page_list t
+		WHERE 1 = 1
+		<if test=" title != null and title != '' ">
+			AND t.title like '%${title}%'
+		</if>
+		<if test=" fid != null and fid != '' ">
+			AND t.fid = #{fid}
+		</if>
+		ORDER BY t.clickNum DESC
+	</select>
 
-	<!-- 映射 
-	<resultMap type="ringbackstage.web.model.log.AdminLog" id="adminLogResultMap">
+	<resultMap type="ring.server.jsoup.mvc.model.page.PageList" id="pageListMap">
 		<result property="id" column="id" />
-		<result property="logType" column="log_type" />
-		<result property="uri" column="uri" />
-		<result property="reqMethod" column="req_method" />
-		<result property="reqParams" column="req_params" />
-		<result property="code" column="code" />
-		<result property="message" column="message" />
-		<result property="errorMsg" column="error_msg" />
-		<result property="createIp" column="create_ip" />
-		<result property="createDate" column="create_date" />
-		<result property="createBy" column="create_by" />
+		<result property="title" column="title" />
+		<result property="author" column="author" />
+		<result property="createDate" column="createDate" />
+		<result property="clickNum" column="clickNum" />
+		<result property="url" column="url" />
+		<result property="fid" column="fid" />
+		<result property="yearMonth" column="yearMonth" />
+		<result property="target" column="target" />
+		<result property="ts" column="ts" />
 	</resultMap>
-	-->
+
 </mapper>

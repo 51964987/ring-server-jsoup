@@ -72,22 +72,15 @@ public class JsoupApplicationTest {
 		
 		String url = "https://cl.wy8.info/thread0806.php?fid=7&search=&page=13";
 		try {
-			//PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
+			PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
 			List<PageList> list = new ArrayList<>();
-			new CommonListPage(url,list).call();
-			pageListMapper.addTempTable();
+			new CommonListPage(url,pageConfig,list).call();
 			if(list.size()>0){
-				//System.out.println(JSON.toJSONString(list));
+				System.out.println("批量插入或更新正式表");
 				pageListMapper.addList(list);
 			}else{
 				System.err.println("没有数据");
 			}
-			//logger.info("批量插入或更新正式表");
-			pageListMapper.addByTempTable();
-			//logger.info("睡眠前时间");
-			Thread.sleep(10*1000);
-			//logger.info("睡眠后时间");
-			pageListMapper.updateByTempTable();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

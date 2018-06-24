@@ -43,30 +43,20 @@
 	<header class="navbar-wrapper">
 		<div class="navbar navbar-black navbar-fixed-top">
 			<div class="container cl">
-				<a class="logo navbar-logo hidden-xs" href="/aboutHui.shtml"><img width="44" height="44" alt="" src="image/logo.png">RING</a>
-				<a class="logo navbar-logo-m visible-xs" href="/aboutHui.shtml">RING</a>
+				<a class="logo navbar-logo hidden-xs" th:href="@{/index/index}">RING</a>
+				<a class="logo navbar-logo-m visible-xs" th:href="@{/index/index}">RING</a>
 				<!-- <span class="logo navbar-slogan hidden-xs">简单 &middot; 免费 &middot; 适合中国网站</span> -->
 				<a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs JS-nav-toggle" href="javascript:;">&#xe667;</a>
 				<nav class="nav navbar-nav nav-collapse" role="navigation" id="Hui-navbar">
 					<ul class="cl">
-						<li>
-							<a href="/" target="_blank">首页</a>
-						</li>
-						<li>
-							<a href="http://www.h-ui.net/lib/jQuery.cookie.js.shtml" target="_blank">配置来源</a>
-						</li>
+						<li><a  th:href="@{/index}">首页</a></li>
+						<li><a  th:href="@{/page/list}">列表</a></li>
 						<li class="dropDown dropDown_hover current">
-							<a href="javascript:;" class="dropDown_A">工具 <i class="Hui-iconfont">&#xe6d5;</i></a>
+							<a href="javascript:;" class="dropDown_A">配置 <i class="Hui-iconfont">&#xe6d5;</i></a>
 							<ul class="dropDown-menu menu radius box-shadow">
-								<li>
-									<a href="http://www.h-ui.net/bug.shtml" target="_blank">Bug兼容性汇总</a>
-								</li>
-								<li>
-									<a href="http://www.h-ui.net/websafecolors.shtml" target="_blank">web安全色</a>
-								</li>
-								<li>
-									<a href="http://www.h-ui.net/Hui-3.7-Hui-iconfont.shtml" target="_blank">Hui-iconfont</a>
-								</li>
+								<li><a  th:href="@{/config/index}">网站首页配置</a></li>
+								<li><a  th:href="@{/config/list}">网站列表配置</a></li>
+								<li><a  th:href="@{/config/detail}">网站详情配置</a></li>
 								<li>
 									<a href="javascript:;">web工具箱<i class="arrow Hui-iconfont">&#xe6d7;</i></a>
 									<ul class="menu">
@@ -150,73 +140,7 @@
 			</div>
 		</nav>
 		<div class="container">
-			<form action="" method="post" class="form form-horizontal responsive" id="demoform">
-				<div class="row cl">
-					<label class="form-label col-xs-3">中文名称：</label>
-					<div class="formControls col-xs-8">
-						<input type="text" class="input-text" placeholder="目标网站中文名称" name="cnName" id="cnName">
-					</div>
-				</div>
-				<div class="row cl">
-					<label class="form-label col-xs-3">英文名称：</label>
-					<div class="formControls col-xs-8">
-						<input type="text" class="input-text" placeholder="目标网站英文名称" name="enName" id="enName">
-					</div>
-				</div>
-				<div class="row cl">
-					<label class="form-label col-xs-3">是否下载：</label>
-					<div class="formControls col-xs-8">
-						<span class="select-box">
-							<select class="select" size="1" name="isDownload">
-								<option value="0" selected>否</option>
-								<option value="1">是</option>
-							</select>
-						</span>
-					</div>
-				</div>
-				<div class="row cl">
-					<label class="form-label col-xs-3">下载路径：</label>
-					<div class="formControls col-xs-8">
-						<input type="text" class="input-text" autocomplete="off" placeholder="下载路径" name="localpath" id="localpath">
-					</div>
-				</div>
-				<div class="row cl">
-					<label class="form-label col-xs-3">列表页面Pattern：</label>
-					<div class="formControls col-xs-8">
-						<input type="text" class="input-text" autocomplete="off" placeholder="(https?://[[\d\w]+\.]+/)thread0806.php\?fid=(\d+)&search=&page=(\d+)" name="listUrlPattern" id="listUrlPattern">
-					</div>
-				</div>
-				<div class="row cl">
-					<label class="form-label col-xs-3">详细页面Pattern：</label>
-					<div class="formControls col-xs-8">
-						<input type="text" class="input-text" autocomplete="off" placeholder="(htm_data/\d+/\d+/)(\d+).html" name="listUrlPattern" id="listUrlPattern">
-					</div>
-				</div>
-				<div class="row cl">
-					<label class="form-label col-xs-3">获取图片对象：</label>
-					<div class="formControls col-xs-8">
-						<input type="text" class="input-text" autocomplete="off" placeholder="data-src" name="imageGet" id="imageGet">
-					</div>
-				</div>
-				<div class="row cl">
-					<label class="form-label col-xs-3">获取图片地址的属性：</label>
-					<div class="formControls col-xs-8">
-						<input type="text" class="input-text" autocomplete="off" placeholder="data-src" name="imageAttr" id="imageAttr">
-					</div>
-				</div>
-				<div class="row cl">
-					<label class="form-label col-xs-3">获取磁力连接对象：</label>
-					<div class="formControls col-xs-8">
-						<input type="text" class="input-text" autocomplete="off" placeholder="a" name="magnetGet" id="magnetGet">
-					</div>
-				</div>
-				<div class="row cl">
-					<div class="col-xs-8 col-xs-offset-3">
-						<input class="btn btn-primary" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
-					</div>
-				</div>
-			</form>
-				
+							
 		</div>
 		<footer class="footer mt-20">
 			<div class="container">

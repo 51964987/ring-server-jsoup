@@ -58,31 +58,31 @@ public class CommonPagination implements IPagination{
 			//遍历每一页面
 			StringBuffer urlSb = new StringBuffer();
 			List<PageList> list = new ArrayList<>();
-			pageListMapper.addTempTable();
+//			pageListMapper.addTempTable();
 			for(int i=1;i<=lastPage;i++){
 				urlSb.setLength(0);
 				m.reset(url);
 				if(m.find()){
 					m.appendReplacement(urlSb, "page="+i);
 				}
-				logger.info(urlSb.toString());
-				new CommonListPage(urlSb.toString(),list).call();
+				new CommonListPage(urlSb.toString(),pageConfig,list).call();
 				if(list.size()>0){
-					logger.info("批量插入临时表="+list.size());
+					logger.info("批量插入数据"+list.size()+"条");
 					pageListMapper.addList(list);
 					list.clear();
 				}
 				//睡眠10秒钟
 				logger.info("睡眠前时间");
-				Thread.sleep(10*1000);
+				Thread.sleep(4*1000);
 				logger.info("睡眠后时间");
 			}
-			logger.info("批量插入或更新正式表");
-			pageListMapper.addByTempTable();
-			logger.info("睡眠前时间");
-			Thread.sleep(10*1000);
-			logger.info("睡眠后时间");
-			pageListMapper.updateByTempTable();
+			
+			if(list.size()>0){
+				logger.info("批量插入数据"+list.size()+"条");
+				pageListMapper.addList(list);
+				list.clear();
+			}
+			
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}

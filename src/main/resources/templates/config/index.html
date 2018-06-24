@@ -1,0 +1,306 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5shiv.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.min.css" />
+<!--[if lt IE 9]>
+<link href="h-ui/css/H-ui.ie.css" rel="stylesheet" type="text/css" />
+<![endif]-->
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<style type="text/css">
+.ui-sortable .panel-header{ cursor:move}
+</style>
+<title>Hi，H-ui v3.1</title>
+<meta name="keywords" content="关键词,5个左右,单个8汉字以内">
+<meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+</head>
+<body ontouchstart>
+<div class="sideBox">
+	<ul class="nav navbar-nav pt-20">
+		<li><a href="about.html">登录/注册</a></li>
+		<li><a href="jiansuo.html">技术检索</a></li>
+		<li><a href="about.html">关于我们</a></li>
+		<li><a href="#">联系我们</a></li>
+		<li><a href="#">隐私保护</a></li>
+		<li><a href="#">免责声明</a></li>
+		<li><a href="#">支付方式</a></li>
+	</ul>
+</div>
+<div class="containBox">
+    <div class="containBox-bg"></div>
+	<header class="navbar-wrapper">
+		<div class="navbar navbar-black navbar-fixed-top">
+			<div class="container cl">
+				<a class="logo navbar-logo hidden-xs" th:href="@{/index/index}">RING</a>
+				<a class="logo navbar-logo-m visible-xs" th:href="@{/index/index}">RING</a>
+				<!-- <span class="logo navbar-slogan hidden-xs">简单 &middot; 免费 &middot; 适合中国网站</span> -->
+				<a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs JS-nav-toggle" href="javascript:;">&#xe667;</a>
+				<nav class="nav navbar-nav nav-collapse" role="navigation" id="Hui-navbar">
+					<ul class="cl">
+						<li><a  th:href="@{/index/index}">首页</a></li>
+						<li class="dropDown dropDown_hover current">
+							<a href="javascript:;" class="dropDown_A">配置 <i class="Hui-iconfont">&#xe6d5;</i></a>
+							<ul class="dropDown-menu menu radius box-shadow">
+								<li><a  th:href="@{/config/index}">网站首页配置</a></li>
+								<li><a  th:href="@{/config/list}">网站列表配置</a></li>
+								<li><a  th:href="@{/config/detail}">网站详情配置</a></li>
+								<li>
+									<a href="javascript:;">web工具箱<i class="arrow Hui-iconfont">&#xe6d7;</i></a>
+									<ul class="menu">
+										<li>
+											<a href="http://www.h-ui.net/tools/jsformat.shtml" target="_blank">JS/HTML格式化工具</a>
+										<li>
+											<a href="http://www.h-ui.net/tools/HTMLtoJS.shtml" target="_blank">HTML/JS转换工具</a>
+										<li>
+											<a href="http://www.h-ui.net/tools/cssformat.shtml" target="_blank">CSS代码格式化工具</a>
+										<li>
+											<a href="http://www.h-ui.net/tools/daxiaoxie.shtml" target="_blank">字母大小写转换工具</a>
+										<li>
+											<a href="http://www.h-ui.net/tools/fantizhuanhuan.shtml" target="_blank">繁体字、火星文转换</a>
+										<li>
+											<a href="javascript:;">三级菜单<i class="arrow Hui-iconfont">&#xe6d7;</i></a>
+											<ul class="menu">
+												<li>
+													<a href="javascript:;">四级菜单</a>
+												</li>
+												<li>
+													<a href="javascript:;">四级菜单</a>
+												</li>
+												<li>
+													<a href="javascript:;">四级菜单</a>
+												</li>
+											</ul>
+										</li>
+										<li>
+											<a href="#">三级导航</a>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<a href="#">二级导航</a>
+								</li>
+								<li class="disabled">
+									<a href="javascript:;">二级菜单</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="http://h-ui.net/aboutHui.shtml" target="_blank">联系我们</a>
+						</li>
+					</ul>
+				</nav>
+				<nav class="navbar-userbar hidden-xs"></nav>
+			</div>
+		</div>
+	</header>
+	<div class="wap-container">
+		<!-- <div id="slider-3">
+			<div class="slider">
+				<div class="bd">
+					<ul>
+						<li>
+							<a href="http://www.h-ui.net/" target="_blank"><img src="temp/banner1.jpg" ></a>
+						</li>
+						<li>
+							<a href="http://www.h-ui.net/zhaoshang.shtml" target="_blank"><img src="temp/banner2.jpg" ></a>
+						</li>
+						<li>
+							<a href="http://h-ui.net/H-ui.admin.shtml" target="_blank"><img src="temp/banner3.jpg" ></a>
+						</li>
+					</ul>
+				</div>
+				<ol class="hd cl dots">
+					<li>1</li>
+					<li>2</li>
+					<li>3</li>
+				</ol>
+			</div>
+		</div> -->
+		<nav class="breadcrumb" style="background: #f5f5f5">
+			<div class="container">
+				<i class="Hui-iconfont">&#xe67f;</i>
+				<a href="/" class="c-primary">首页</a>
+				<span class="c-gray en">&gt;</span>
+				<a href="#">组件</a>
+				<span class="c-gray en">&gt;</span>
+				<span class="c-gray">当前页面</span>
+			</div>
+		</nav>
+		<div class="container">
+			<form action="" method="post" class="form form-horizontal responsive" id="demoform">
+				<div class="row cl">
+					<label class="form-label col-xs-3">中文名称：</label>
+					<div class="formControls col-xs-8">
+						<input type="text" class="input-text" placeholder="目标网站中文名称" name="cnName" id="cnName">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-3">英文名称：</label>
+					<div class="formControls col-xs-8">
+						<input type="text" class="input-text" placeholder="目标网站英文名称" name="enName" id="enName">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-3">是否下载：</label>
+					<div class="formControls col-xs-8">
+						<span class="select-box">
+							<select class="select" size="1" name="isDownload">
+								<option value="0" selected>否</option>
+								<option value="1">是</option>
+							</select>
+						</span>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-3">下载路径：</label>
+					<div class="formControls col-xs-8">
+						<input type="text" class="input-text" autocomplete="off" placeholder="下载路径" name="localpath" id="localpath">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-3">列表页面Pattern：</label>
+					<div class="formControls col-xs-8">
+						<input type="text" class="input-text" autocomplete="off" placeholder="(https?://[[\d\w]+\.]+/)thread0806.php\?fid=(\d+)&search=&page=(\d+)" name="listUrlPattern" id="listUrlPattern">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-3">详细页面Pattern：</label>
+					<div class="formControls col-xs-8">
+						<input type="text" class="input-text" autocomplete="off" placeholder="(htm_data/\d+/\d+/)(\d+).html" name="listUrlPattern" id="listUrlPattern">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-3">获取图片对象：</label>
+					<div class="formControls col-xs-8">
+						<input type="text" class="input-text" autocomplete="off" placeholder="data-src" name="imageGet" id="imageGet">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-3">获取图片地址的属性：</label>
+					<div class="formControls col-xs-8">
+						<input type="text" class="input-text" autocomplete="off" placeholder="data-src" name="imageAttr" id="imageAttr">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-3">获取磁力连接对象：</label>
+					<div class="formControls col-xs-8">
+						<input type="text" class="input-text" autocomplete="off" placeholder="a" name="magnetGet" id="magnetGet">
+					</div>
+				</div>
+				<div class="row cl">
+					<div class="col-xs-8 col-xs-offset-3">
+						<input class="btn btn-primary" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+					</div>
+				</div>
+			</form>
+				
+		</div>
+		<footer class="footer mt-20">
+			<div class="container">
+				<p>Copyright &copy;2013-2017 H-ui.net All Rights Reserved.</p>
+			</div>
+		</footer>
+	</div>
+</div>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/jquery-ui/1.9.1/jquery-ui.min.js"></script>
+<script type="text/javascript" src="h-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="lib/jquery.SuperSlide/2.1.1/jquery.SuperSlide.min.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.min.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.min.js"></script>
+<script>
+//弹窗
+function modaldemo(){
+	$("#modal-demo").modal("show");
+}
+//消息框
+function modalalertdemo(){
+	$.Huimodalalert('我是消息框，2秒后我自动滚蛋！',2000);
+}
+$(function(){
+	$("#demoform").validate({
+		rules:{
+			email:{
+				required:true,
+				email:true,
+			},
+			username:{
+				required:true,
+				minlength:4,
+				maxlength:16
+			},
+			telephone:{
+				required:true,
+				isMobile:true,
+			},
+			password:{
+				required:true,
+				isPwd:true,
+			},
+			password2:{
+				required:true,
+				equalTo: "#password"
+			},
+			sex:{
+				required:true,
+			},
+			datetimepicker:{
+				required:true,	
+			},
+			checkbox2:{
+				required:true,
+			},
+			city:{
+				required:true,
+			},
+			website:{
+				required:true,
+				url:true,
+			},
+			beizhu:{
+				maxlength:500,
+			}
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			$("#modal-shenqing-success").modal("show");
+			$(form).ajaxSubmit();
+		}
+	});
+	
+	//返回顶部
+	$.Huitotop();
+	
+ 	var _bodyHeight = $(window).height();
+	var _doch = $(document).height();
+	$(".containBox").height(_bodyHeight);
+
+	/*左右滑动菜单*/
+    $(".JS-nav-toggle").click(function() {
+		$("body").addClass('sideBox-open');
+        $(".containBox-bg").height(_bodyHeight).show();
+    });
+    $(".containBox-bg").click(function() {
+		$(this).hide();
+		$("body").removeClass('sideBox-open');
+    });
+});
+</script>
+</body>
+</html>
+<!--H-ui前端框架提供前端技术支持 h-ui.net @2017-01-01 -->
