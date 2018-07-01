@@ -25,7 +25,7 @@ import ring.server.jsoup.mvc.model.page.PageDetail;
 import ring.server.jsoup.mvc.model.page.PageList;
 import ring.server.jsoup.mvc.service.page.PageConfigServiceImpl;
 import ring.server.jsoup.mvc.service.page.PageDetailServiceImpl;
-import ring.server.jsoup.mvc.service.page.PageListService;
+import ring.server.jsoup.mvc.service.page.PageListServiceImpl;
 import ring.server.jsoup.mvc.utils.DataTableResultHelper;
 
 @RestController
@@ -38,15 +38,23 @@ public class PageController {
 	PageConfigServiceImpl pageConfigServiceImpl;
 	
 	@Autowired
-	PageListService pageListService;
+	PageListServiceImpl  pageListServiceImpl ;
 	@Autowired
 	PageListMapper pageListMapper;
-	
+
+	@RequestMapping("counts")
+	public ResponseEntity<Object> counts(){
+		try {
+			return new ResponseEntity<>(pageListServiceImpl.findListCounts(),HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		}
+	}
 
 	@RequestMapping(value="detail/{id}",method=RequestMethod.GET)
 	public ModelAndView detail(@PathVariable("id") String id) throws Exception{
 		ModelAndView model = new ModelAndView("page/page-detail");
-		PageList pageList = pageListService.findById(id);
+		PageList pageList = pageListServiceImpl.findById(id);
 		PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
 		//从page_url获取URL
 		//...
@@ -87,7 +95,7 @@ public class PageController {
 		//本地服务器
 		if("1".equals(server)){			
 			PageHelper.offsetPage(iDisplayStart, iDisplayLength, true);
-			List<PageList> list = pageListService.findList(pageList);
+			List<PageList> list = pageListServiceImpl.findList(pageList);
 			PageInfo<PageList> pageInfo = new PageInfo<>(list);
 			map = DataTableResultHelper.dataTableResult(sEcho+1, pageInfo);
 		}else if("2".equals(server)){			

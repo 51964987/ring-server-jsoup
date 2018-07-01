@@ -3,10 +3,10 @@
 <mapper namespace="ring.server.jsoup.mvc.dao.page.PageListMapper">
 	<!-- 增加 -->
 	<insert id="addList">  
-        REPLACE INTO page_list(id,title,author,clickNum,url,fid,yearMonth,target,createDate,ts)  
+        REPLACE INTO page_list(id,title,author,clickNum,url,fid,yearMonth,target,createDate,ts,source)  
         VALUES   
         <foreach collection="list" item="emp" separator=",">  
-            (#{emp.id},#{emp.title},#{emp.author},#{emp.clickNum},#{emp.url},#{emp.fid},#{emp.yearMonth},#{emp.target},#{emp.createDate},#{emp.ts})  
+            (#{emp.id},#{emp.title},#{emp.author},#{emp.clickNum},#{emp.url},#{emp.fid},#{emp.yearMonth},#{emp.target},#{emp.createDate},#{emp.ts},#{emp.source})  
         </foreach>  
 	</insert> 
 	
@@ -38,6 +38,20 @@
 		<result property="yearMonth" column="yearMonth" />
 		<result property="target" column="target" />
 		<result property="ts" column="ts" />
+	</resultMap>
+	
+	<select id="findCounts" resultMap="pageLisCountMap">
+		SELECT t.fid,m.`modelName`,COUNT(1) AS counts FROM page_list t 
+		LEFT JOIN page_model m ON t.`source` = m.`enName`
+		WHERE t.`fid` = m.`model`
+		GROUP BY t.fid
+		ORDER BY counts ASC
+	</select>
+	
+	<resultMap type="ring.server.jsoup.mvc.model.page.PageListCounts" id="pageLisCountMap">
+		<result property="fid" column="fid" />
+		<result property="modelName" column="modelName" />
+		<result property="counts" column="counts" />
 	</resultMap>
 
 </mapper>
