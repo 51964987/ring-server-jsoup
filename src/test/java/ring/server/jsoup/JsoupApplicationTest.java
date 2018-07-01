@@ -16,8 +16,8 @@ import ring.server.jsoup.common.page.common.CommonPagination;
 import ring.server.jsoup.mvc.dao.page.PageListMapper;
 import ring.server.jsoup.mvc.model.page.PageConfig;
 import ring.server.jsoup.mvc.model.page.PageList;
-import ring.server.jsoup.mvc.service.page.PageConfigServiceImpl;
-import ring.server.jsoup.mvc.service.page.PageDetailServiceImpl;
+import ring.server.jsoup.mvc.service.page.impl.PageConfigServiceImpl;
+import ring.server.jsoup.mvc.service.page.impl.PageDetailServiceImpl;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = JsoupApplication.class)

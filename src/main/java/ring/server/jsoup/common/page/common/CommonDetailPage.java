@@ -16,7 +16,7 @@ import ring.server.jsoup.common.util.DownloadUtil;
 import ring.server.jsoup.common.util.HttpUrlUtil;
 import ring.server.jsoup.mvc.model.page.PageConfig;
 import ring.server.jsoup.mvc.model.page.PageDetail;
-import ring.server.jsoup.mvc.service.page.PageDetailServiceImpl;
+import ring.server.jsoup.mvc.service.page.impl.PageDetailServiceImpl;
 
 /**
  * 详细页面 

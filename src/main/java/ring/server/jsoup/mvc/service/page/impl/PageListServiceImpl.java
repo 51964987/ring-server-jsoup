@@ -1,4 +1,4 @@
-package ring.server.jsoup.mvc.service.page;
+package ring.server.jsoup.mvc.service.page.impl;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ring.server.jsoup.mvc.dao.page.PageListMapper;
 import ring.server.jsoup.mvc.model.page.PageList;
 import ring.server.jsoup.mvc.model.page.PageListCounts;
+import ring.server.jsoup.mvc.service.page.PageListService;
 
 @Service
 public class PageListServiceImpl implements PageListService{

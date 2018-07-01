@@ -68,29 +68,13 @@ table tr td:last-child{text-align: center}
 		<div class="container">
 			<div class="text-l mt-20">
 				<span class="select-box" style="width: 120px">
-					<select class="select" size="1" name="source">
+					<select class="select" size="1" id="source" name="source">
 						<option value="">选择数据来源</option>
-						<option value="T66Y" selected>草榴社区</option>
 					</select>
 				</span>
 				<span class="select-box" style="width: 120px">
-					<select class="select" size="1" name="fid">
-						<option value="" selected>选择区</option>
-						<option value="2">亞洲無碼原創區</option>
-						<option value="4">歐美原創區</option>
-						<option value="5">動漫原創區</option>
-						<option value="7">技術討論區 </option>
-						<option value="8">新時代的我們</option>
-						<option value="9">草榴資訊</option>
-						<option value="10">草榴影視庫</option>
-						<option value="15">亞洲有碼原創區</option>
-						<option value="16">達蓋爾的旗幟</option>
-						<option value="20">成人文學交流區</option>
-						<option value="21">HTTP下載區</option>
-						<option value="22">在綫成人影院</option>
-						<option value="25">國產原創區</option>
-						<option value="26">中字原創區</option>
-						<option value="27">轉帖交流區</option>
+					<select class="select" size="1" id="fid" name="fid">
+						<option value="" selected>选择模块</option>
 					</select>
 				</span>
 				<span class="select-box" style="width: 120px">
@@ -129,7 +113,7 @@ table tr td:last-child{text-align: center}
 <script type="text/javascript" src="/lib/jquery-ui/1.9.1/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/h-ui/js/H-ui.js"></script>
 <script type="text/javascript" src="/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
-<script>
+<script type="text/javascript" th:inline="javascript">
 /*搜索*/
 function fnSearch(){
 	$('.table-sort').dataTable({
@@ -158,8 +142,10 @@ function fnSearch(){
 		  	{'mDataProp':'oper'}          
 		 ],
          fnServerData:function(sSource,aoData,fnCallback){
+			aoData.push({"name":"source","value":$("[name='source']").val()});
 			aoData.push({"name":"title","value":$("[name='title']").val()});
 			aoData.push({"name":"fid","value":$("[name='fid']").val()});
+			aoData.push({"name":"modelUrl","value":$("#fid option:selected").attr("data-url")});
 			aoData.push({"name":"server","value":$("[name='server']").val()});
 			$.ajax({
 				"dataType":"json",
@@ -179,7 +165,36 @@ $(document).ready(function(){
 		"bFilter" : false,
 		"bSort" : false,  
 		"bLengthChange" : false
-	});  
+	});
+	var _source = $("#source").html("");
+	$("<option>")
+	.attr({"value":""})
+	.text("选择数据来源")
+	.appendTo(_source);
+	$.post(/*[[@{/index/change}]]*/,function(data){
+		$.each(data,function(i,json){
+			$("<option>")
+			.attr({"value":json.enName})
+			.text(json.cnName)
+			.appendTo(_source);
+		});
+	});
+	
+	$("#source").bind("change",function(){
+		var _fid = $("#fid").html("");
+		$("<option>")
+		.attr({"value":""})
+		.text("选择模块")
+		.appendTo(_fid);
+		$.post(/*[[@{/model/change}]]*/,{"source":$("#source").val()},function(data){
+			$.each(data,function(i,json){
+				$("<option>")
+				.attr({"value":json.model,"data-url":json.modelUrl})
+				.text(json.modelName)
+				.appendTo(_fid);
+			});
+		});
+	});
 });
 </script>
 </body>

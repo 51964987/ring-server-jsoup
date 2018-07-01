@@ -1,6 +1,7 @@
 package ring.server.jsoup.mvc.utils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -31,6 +32,23 @@ public class DataTableResultHelper {
 		
 		if(logger.isDebugEnabled()){
 			logger.debug("page dataTable result :"+JSON.toJSONString(pageInfo.getList()));
+		}
+		
+		return map;
+	}
+	
+	public static <T> Map<String, Object> dataTableResult(int sEcho,List<T> list,int lastPage){
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("sEcho", sEcho);
+		map.put("iTotalRecords", lastPage*100);
+		map.put("iTotalDisplayRecords", list);
+		map.put("aaData", list);
+		map.put("code", "200");
+		map.put("message", "OK");
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("page dataTable result :"+JSON.toJSONString(list));
 		}
 		
 		return map;

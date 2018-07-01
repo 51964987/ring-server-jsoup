@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import ring.server.jsoup.common.page.IPagination;
 import ring.server.jsoup.common.util.HttpUrlUtil;
 import ring.server.jsoup.mvc.dao.page.PageListMapper;
-import ring.server.jsoup.mvc.service.page.PageConfigServiceImpl;
+import ring.server.jsoup.mvc.service.page.impl.PageConfigServiceImpl;
 
 public class CommonIndex implements IPagination{
 	private Logger logger = LoggerFactory.getLogger(getClass());

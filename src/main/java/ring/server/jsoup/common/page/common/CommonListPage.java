@@ -1,12 +1,14 @@
 package ring.server.jsoup.common.page.common;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -15,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import ring.server.jsoup.common.page.IListPage;
-import ring.server.jsoup.common.util.HttpUrlUtil;
 import ring.server.jsoup.mvc.model.page.PageConfig;
 import ring.server.jsoup.mvc.model.page.PageList;
 
@@ -38,8 +39,22 @@ public class CommonListPage implements Callable<Object>,IListPage{
 	@Override
 	public Object call() throws Exception{
 
-		Document doc = HttpUrlUtil.get(url);
-
+		Document doc = Jsoup.connect(url).get();
+		
+		//获取最后一页
+		Integer lastPage = 1;
+		Element lastATag = doc.getElementById(pageConfig.getLastPageGet());
+		String href = lastATag.attr(pageConfig.getLastPageAttr());
+		Pattern p1 = Pattern.compile(pageConfig.getLastPagePattern());
+		Matcher m1 = p1.matcher(href);
+		if(m1.find()){
+			lastPage = Integer.valueOf(m1.group(1));
+		}
+		
+		if(list==null){
+			list = new ArrayList<>();
+		}
+		
 		Element table = doc.getElementById("ajaxtable");
 		if(table != null){			
 			Elements trs = table.getElementsByClass("tr3 t_one tac");
@@ -75,7 +90,7 @@ public class CommonListPage implements Callable<Object>,IListPage{
 		}else{
 			logger.warn("no find table!");
 		}
-				
-		return null;
+		
+		return lastPage;
 	}
 }

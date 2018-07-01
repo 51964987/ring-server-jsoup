@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ring.server.jsoup.mvc.dao.page.PageModelMapper">
+	
+	
+	<select id="findBySource" resultMap="pageModelMap">
+		SELECT * FROM page_model WHERE enName = #{enName}
+	</select>
+	
+	<resultMap type="ring.server.jsoup.mvc.model.page.PageModel" id="pageModelMap">
+		<result property="enName" column="enName" />
+		<result property="model" column="model" />
+		<result property="modelName" column="modelName" />
+		<result property="modelUrl" column="modelUrl" />
+	</resultMap>
+	
+</mapper>

@@ -1,5 +1,6 @@
 package ring.server.jsoup.mvc.controller.page;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,14 +19,17 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import ring.server.jsoup.common.page.common.CommonDetailPage;
+import ring.server.jsoup.common.page.common.CommonListPage;
 import ring.server.jsoup.common.page.common.CommonPagination;
 import ring.server.jsoup.mvc.dao.page.PageListMapper;
 import ring.server.jsoup.mvc.model.page.PageConfig;
 import ring.server.jsoup.mvc.model.page.PageDetail;
 import ring.server.jsoup.mvc.model.page.PageList;
-import ring.server.jsoup.mvc.service.page.PageConfigServiceImpl;
-import ring.server.jsoup.mvc.service.page.PageDetailServiceImpl;
-import ring.server.jsoup.mvc.service.page.PageListServiceImpl;
+import ring.server.jsoup.mvc.model.page.PageUrl;
+import ring.server.jsoup.mvc.service.page.impl.PageConfigServiceImpl;
+import ring.server.jsoup.mvc.service.page.impl.PageDetailServiceImpl;
+import ring.server.jsoup.mvc.service.page.impl.PageListServiceImpl;
+import ring.server.jsoup.mvc.service.page.impl.PageUrlServiceImpl;
 import ring.server.jsoup.mvc.utils.DataTableResultHelper;
 
 @RestController
@@ -40,6 +44,8 @@ public class PageController {
 	@Autowired
 	PageListServiceImpl  pageListServiceImpl ;
 	@Autowired
+	PageUrlServiceImpl  pageUrlServiceImpl ;
+	@Autowired
 	PageListMapper pageListMapper;
 
 	@RequestMapping("counts")
@@ -51,14 +57,22 @@ public class PageController {
 		}
 	}
 
-	@RequestMapping(value="detail/{id}",method=RequestMethod.GET)
-	public ModelAndView detail(@PathVariable("id") String id) throws Exception{
+	@RequestMapping(value="detail/{id}/{source}",method=RequestMethod.GET)
+	public ModelAndView detail(@PathVariable("id") String id,@PathVariable("source") String source) throws Exception{
 		ModelAndView model = new ModelAndView("page/page-detail");
 		PageList pageList = pageListServiceImpl.findById(id);
-		PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
+		PageConfig pageConfig = pageConfigServiceImpl.get(source);
 		//从page_url获取URL
 		//...
-		String url = "https://cl.wy8.info/"+pageList.getUrl();
+		// url = "https://cl.wy8.info/"+pageList.getUrl();
+		String url = null;
+		List<PageUrl> pageUrls = pageUrlServiceImpl.findByConfigId(pageConfig.getId());
+		if(pageUrls!=null&&pageUrls.size()>0){
+			//判断是否有效
+			//...
+			url = pageUrls.get(0).getUrl();
+		}
+		url +=pageList.getUrl();
 		model.addObject("url",url);
 		
 		PageDetail pageDetail = new CommonDetailPage(url, pageConfig, pageDetailServiceImpl).call();
@@ -89,6 +103,8 @@ public class PageController {
 			@RequestParam(required=false)Integer iDisplayStart,
 			@RequestParam(required=false)Integer iDisplayLength,
 			@RequestParam(required=false)String server,
+			@RequestParam(required=false)String modelUrl,
+			@RequestParam(required=false)String source,
 			PageList pageList
 			) throws Exception{
 		Map<String, Object> map = null;
@@ -98,19 +114,39 @@ public class PageController {
 			List<PageList> list = pageListServiceImpl.findList(pageList);
 			PageInfo<PageList> pageInfo = new PageInfo<>(list);
 			map = DataTableResultHelper.dataTableResult(sEcho+1, pageInfo);
-		}else if("2".equals(server)){			
+		}else if("2".equals(server)){	
+			PageConfig pageConfig = pageConfigServiceImpl.get(source);
 			//目标服务器
-			
+			String url = null;
+			List<PageUrl> pageUrls = pageUrlServiceImpl.findByConfigId(pageConfig.getId());
+			if(pageUrls!=null&&pageUrls.size()>0){
+				//判断是否有效
+				//...
+				url = pageUrls.get(0).getUrl();
+			}
+			List<PageList> list = new ArrayList<>();
+			int lastPage = (int) new CommonListPage(url+modelUrl,pageConfig,list).call();
+			map = DataTableResultHelper.dataTableResult(sEcho+1, list,lastPage);
 		}
-		
-		
+				
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 	
 	@RequestMapping("exec")
-	public ResponseEntity<Object> exec(String url){
+	public ResponseEntity<Object> exec(
+			@RequestParam(required=false)String server,
+			@RequestParam(required=false)String modelUrl,
+			@RequestParam(required=false)String source){
 		try {
-			new CommonPagination(url,pageConfigServiceImpl,pageListMapper).call();
+			PageConfig pageConfig = pageConfigServiceImpl.get(source);
+			String url = null;
+			List<PageUrl> pageUrls = pageUrlServiceImpl.findByConfigId(pageConfig.getId());
+			if(pageUrls!=null&&pageUrls.size()>0){
+				//判断是否有效
+				//...
+				url = pageUrls.get(0).getUrl();
+			}
+			new CommonPagination(url+modelUrl,pageConfigServiceImpl,pageListMapper).call();
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 		}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ring.server.jsoup.mvc.dao.page.PageIndexMapper">
+	
+	
+	<select id="findAll" resultMap="pageIndexMap">
+		SELECT * FROM page_index
+	</select>
+	
+	<resultMap type="ring.server.jsoup.mvc.model.page.PageIndex" id="pageIndexMap">
+		<result property="enName" column="enName" />
+		<result property="domain" column="domain" />
+		<result property="cnName" column="cnName" />
+	</resultMap>
+	
+</mapper>

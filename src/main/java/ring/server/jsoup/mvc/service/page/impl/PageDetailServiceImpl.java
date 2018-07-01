@@ -1,4 +1,4 @@
-package ring.server.jsoup.mvc.service.page;
+package ring.server.jsoup.mvc.service.page.impl;
 
 import java.util.UUID;
 
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import ring.server.jsoup.mvc.dao.page.PageDetailMapper;
 import ring.server.jsoup.mvc.model.page.PageDetail;
+import ring.server.jsoup.mvc.service.page.PageDetailService;
 @Service
 public class PageDetailServiceImpl implements PageDetailService{
 	private Logger logger = LoggerFactory.getLogger(getClass());
