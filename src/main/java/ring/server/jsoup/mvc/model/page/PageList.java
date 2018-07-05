@@ -22,6 +22,7 @@ public class PageList implements java.io.Serializable{
 	private String source;
 	@JsonSerialize(using=PageListOperSerializer.class)
 	private String oper;
+	private String modelName;
 	
 	public String getId() {
 		return id;
@@ -94,5 +95,11 @@ public class PageList implements java.io.Serializable{
 	}
 	public void setOper(String oper) {
 		this.oper = oper;
+	}
+	public String getModelName() {
+		return modelName;
+	}
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
 	}
 }

@@ -1,32 +1,7 @@
 <!DOCTYPE HTML>
-<html style="height: 100%" xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="utf-8">
-<meta name="renderer" content="webkit|ie-comp|ie-stand">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-<!--[if lt IE 9]>
-<script type="text/javascript" src="lib/html5shiv.js"></script>
-<script type="text/javascript" src="lib/respond.min.js"></script>
-<![endif]-->
-<link rel="stylesheet" type="text/css" href="h-ui/css/H-ui.min.css" />
-<link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.min.css" />
-<!--[if lt IE 9]>
-<link href="h-ui/css/H-ui.ie.css" rel="stylesheet" type="text/css" />
-<![endif]-->
-<!--[if IE 6]>
-<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
-<script>DD_belatedPNG.fix('*');</script>
-<![endif]-->
-<style type="text/css">
-.ui-sortable .panel-header{ cursor:move}
-</style>
-<title>Hi，H-ui v3.1</title>
-<meta name="keywords" content="关键词,5个左右,单个8汉字以内">
-<meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
-</head>
-<body style="height: 100%; margin: 0">
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/common-head :: onloadHead('首页')"></head>
+<body>
 <div class="sideBox">
 	<ul class="nav navbar-nav pt-20">
 		<li><a href="about.html">登录/注册</a></li>
@@ -40,7 +15,7 @@
 </div>
 <div class="containBox">
     <div class="containBox-bg"></div>
-	<div th:replace="/common/common-header :: onloadHeader('/page-list')"></div>
+	<div th:replace="/common/common-header :: onloadHeader('/index')"></div>
 	<div class="wap-container">
 		<nav class="breadcrumb" style="background: #f5f5f5">
 			<div class="container">
@@ -48,37 +23,45 @@
 				<a href="/" class="c-primary">首页</a>
 			</div>
 		</nav>
-		<div class="container">
-			<div id="container" style="height:455px"></div>				
-		</div>
-		<footer class="footer mt-20">
-			<div class="container">
-				<p>Copyright &copy;2013-2017 H-ui.net All Rights Reserved.</p>
+		<div class="container ui-sortable">
+			<h1>Hi，RING</h1>
+			<!-- <p>开始前端之旅！</p> -->
+			<div class="panel panel-default">
+				<div class="panel-header">本地统计</div>
+				<div class="panel-body">
+					<div id="container" data-dom="echarts" style="height:455px"></div>		
+				</div>
 			</div>
-		</footer>
+			<div class="panel panel-default mt-20">
+				<div class="panel-header">远程统计</div>
+				<div class="panel-body">
+					<div id="demo" style="height:455px;width: 100%">
+						<img alt="" id="tmpImg" src="" style="border: 1px solid red">
+					</div>		
+				</div>
+			</div>
+			<div th:replace="/common/common-footer :: onloadFooter"></div>
+		</div>
 	</div>
 </div>
 
-<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
-<script type="text/javascript" src="lib/jquery-ui/1.9.1/jquery-ui.min.js"></script>
-<script type="text/javascript" src="h-ui/js/H-ui.js"></script>
+<div th:insert="/common/common-js :: onloadJS"></div>
 <script type="text/javascript" th:src="@{/lib/echarts/4.1.0.rc2/echarts.min.js}"></script>
 
 <script type="text/javascript">
 $(function(){
-	//返回顶部
-	$.Huitotop();
+	
+	var canvas = page.waterMarkEvent();
+	$("#tmpImg")[0].src = canvas.toDataURL("image/png");
+	$("#demo").css("background-image","url('"+canvas.toDataURL("image/png")+"')");
+	//document.getElementById('demo').style.backgroundImage = 'url("' + canvas.toDataURL() + '")';
+	
 	var dom = document.getElementById("container");
 	var myChart = echarts.init(dom);
-	myChart.showLoading();
-	$.post("page/counts",function(data){
+	
+	$.post("page/counts",function(data){		
 		
-		//var dom = document.getElementById("container");
-		//var myChart = echarts.init(dom);
-		
-		var app = {};
 		option = null;
-		app.title = '水印 - ECharts 下载统计'
 
 		var downloadJson = {};
 		var total=0;
@@ -87,42 +70,22 @@ $(function(){
 			downloadJson[data[i]['modelName']]=sum;
 			total+=sum*1;
 		}
+		
 		var builderJson = {
 		  "all": total,
 		  "charts": downloadJson
 		};
-
-		var waterMarkText = 'RING';
-
-		var canvas = document.createElement('canvas');
-		var ctx = canvas.getContext('2d');
-		canvas.width = canvas.height = 100;
-		ctx.textAlign = 'center';
-		ctx.textBaseline = 'middle';
-		ctx.globalAlpha = 0.08;
-		ctx.font = '20px Microsoft Yahei';
-		ctx.translate(50, 50);
-		ctx.rotate(-Math.PI / 4);
-		ctx.fillText(waterMarkText, 0, 0);
-
 		option = {
 		    backgroundColor: {
 		        type: 'pattern',
-		        image: canvas,
+		        image: page.waterMarkEvent(),
 		        repeat: 'repeat'
 		    },
 		    tooltip: {},
 		    title: [{
-		        text: '本地服务区柱状图展示',
+		        text: '草榴社区',
 		        subtext: '总计 ' + builderJson.all,
-		        x: '25%',
-		        textAlign: 'center'
-		    }, {
-		        text: '本地服务区饼状图展示',
-		        subtext: '总计 ' + Object.keys(downloadJson).reduce(function (all, key) {
-		            return all + downloadJson[key]*1;
-		        }, 0),
-		        x: '75%',
+		        x: '50%',
 		        textAlign: 'center'
 		    }],
 		    grid: [{
@@ -191,9 +154,9 @@ $(function(){
 		    myChart.setOption(option, true);
 		}
 		
-		myChart.hideLoading();
 		myChart.on("click",function(param){
-			
+			alert(param.name);
+			//location.href="/page/list?source=T66Y&fid=7&server=1";
 		});
 		
 	});

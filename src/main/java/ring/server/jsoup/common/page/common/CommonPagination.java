@@ -15,21 +15,18 @@ import ring.server.jsoup.common.page.IPagination;
 import ring.server.jsoup.mvc.dao.page.PageListMapper;
 import ring.server.jsoup.mvc.model.page.PageConfig;
 import ring.server.jsoup.mvc.model.page.PageList;
-import ring.server.jsoup.mvc.service.page.impl.PageConfigServiceImpl;
 
 public class CommonPagination implements IPagination{
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	private String url;
-	private PageConfigServiceImpl pageConfigServiceImpl;
-	//private PageDetailServiceImpl pageDetailServiceImpl;
+	private PageConfig pageConfig;
 	private PageListMapper pageListMapper;
 	
-	public CommonPagination(String url, PageConfigServiceImpl pageConfigServiceImpl,
-			PageListMapper pageListMapper) {
+	public CommonPagination(String url, PageConfig pageConfig,PageListMapper pageListMapper) {
 		super();
 		this.url = url;
-		this.pageConfigServiceImpl = pageConfigServiceImpl;
+		this.pageConfig = pageConfig;
 		this.pageListMapper = pageListMapper;
 	}
 
@@ -37,7 +34,7 @@ public class CommonPagination implements IPagination{
 	public void call(){
 		try {
 			//获取配置信息
-			PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
+			//PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
 			
 			//获取最后一页
 			Document doc = Jsoup.connect(url).get();
@@ -58,7 +55,6 @@ public class CommonPagination implements IPagination{
 			//遍历每一页面
 			StringBuffer urlSb = new StringBuffer();
 			List<PageList> list = new ArrayList<>();
-//			pageListMapper.addTempTable();
 			for(int i=1;i<=lastPage;i++){
 				urlSb.setLength(0);
 				m.reset(url);

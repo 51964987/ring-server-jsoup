@@ -146,7 +146,7 @@ public class PageController {
 				//...
 				url = pageUrls.get(0).getUrl();
 			}
-			new CommonPagination(url+modelUrl,pageConfigServiceImpl,pageListMapper).call();
+			new CommonPagination(url+modelUrl,pageConfig,pageListMapper).call();
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 		}

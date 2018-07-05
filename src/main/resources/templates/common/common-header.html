@@ -11,8 +11,8 @@
 				<a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs JS-nav-toggle" href="/javascript:;">&#xe667;</a>
 				<nav class="nav navbar-nav nav-collapse" role="navigation" id="Hui-navbar">
 					<ul class="cl">
-						<li><a  th:href="@{/index}">首页</a></li>
-						<li class="current"><a  th:href="@{/page/list}">列表</a></li>
+						<li th:class="${url} eq '/index' ? 'current' : ''"><a th:href="@{/index}">首页</a></li>
+						<li th:class="${url} eq '/page/list' ? 'current' : ''"><a th:href="@{/page/list}">列表</a></li>
 						<li class="dropDown dropDown_hover ">
 							<a href="/javascript:;" class="dropDown_A">配置 <i class="Hui-iconfont">&#xe6d5;</i></a>
 							<ul class="dropDown-menu menu radius box-shadow">

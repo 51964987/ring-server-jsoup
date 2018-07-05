@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="onloadDataTables(form,table,url)">
+<script type="text/javascript" th:src="@{/lib/datatables/1.10.0/jquery.dataTables.min.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+	$([[${form}]]).find("[type='submit']").click(function (event) {
+	    event.preventDefault();
+	    var _aoColumns = [];
+	    $([[${table}]]).find("th[data-mDataProp!='']").each(function(){
+	    	var dataJson={};
+	    	dataJson['mDataProp']=$(this).attr("data-mDataProp");
+	    	_aoColumns.push(dataJson);
+	    });
+	    $([[${table}]]).dataTable({
+			"bPaginate" : true,
+		    "bStateSave" : false,     
+		    "bScrollCollapse" : true,   
+		    "bLengthChange" : true,   
+		    "bFilter" : false,   
+		    "bSort" : false,   
+		    "bInfo" : true,   
+		    "bAutoWidth" : true,  
+		    "bJQueryUI" : false,  
+		    "bDestroy" : true,  
+		    "bDeferRender": true,
+		    "bProcessing": true,
+		    "bServerSide": true,
+		    "sServerMethod":"POST",
+			"sAjaxSource" : [[${url}]],
+			"sDom":"<\"H\">t<\"F\"ifl>p",
+			"aoColumns" : _aoColumns,
+		     fnServerData:function(sSource,aoData,fnCallback){
+		    	 $([[${form}]]).find("[name!='']").each(function(){
+					if( $(this).attr("name") != "undefined"){
+						aoData.push({"name":$(this).attr("name"),"value":$(this).val()});
+					}
+				});				
+				$.ajax({
+					"dataType":"json",
+					"type":"POST",
+					"url":sSource,
+					"data":aoData,
+					"success":fnCallback
+				});
+		     },
+		     fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+		    	//...
+		     }
+		}).fnDraw(true);
+	});	
+	$(function(){
+		$([[${table}]]).dataTable({
+			"bFilter" : false,   
+		    "bSort" : false,   
+		    "bLengthChange" : false,   
+		    "bInfo" : true
+		});
+	});
+</script>
+
+</div>
+</body>
+</html>

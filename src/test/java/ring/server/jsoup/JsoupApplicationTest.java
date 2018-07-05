@@ -92,7 +92,8 @@ public class JsoupApplicationTest {
 		
 		String url = "https://cl.wy8.info/thread0806.php?fid=7&search=&page=1";
 		try {
-			new CommonPagination(url,pageConfigServiceImpl,pageListMapper).call();
+			PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
+			new CommonPagination(url,pageConfig,pageListMapper).call();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -104,7 +105,8 @@ public class JsoupApplicationTest {
 		
 		String url = "https://cl.wy8.info/index.php";
 		try {
-			new CommonIndex(url,pageConfigServiceImpl,pageListMapper).call();
+			PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
+			new CommonIndex(url,pageConfig,pageListMapper).call();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

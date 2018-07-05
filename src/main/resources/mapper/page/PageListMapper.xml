@@ -16,8 +16,9 @@
 	</select>
 	
 	<select id="findList" resultType="ring.server.jsoup.mvc.model.page.PageList" resultMap="pageListMap">
-		SELECT t.*,t.id as oper FROM page_list t
-		WHERE 1 = 1
+		SELECT t.*,m.`modelName` FROM page_list t
+		LEFT JOIN page_model m ON t.`fid` = m.`model`
+		WHERE t.`source` = m.`enName`
 		<if test=" title != null and title != '' ">
 			AND t.title like '%${title}%'
 		</if>
@@ -41,7 +42,7 @@
 	</resultMap>
 	
 	<select id="findCounts" resultMap="pageLisCountMap">
-		SELECT t.fid,m.`modelName`,COUNT(1) AS counts FROM page_list t 
+		SELECT t.fid,m.`enName`,m.`modelName`,COUNT(1) AS counts FROM page_list t 
 		LEFT JOIN page_model m ON t.`source` = m.`enName`
 		WHERE t.`fid` = m.`model`
 		GROUP BY t.fid
@@ -50,6 +51,7 @@
 	
 	<resultMap type="ring.server.jsoup.mvc.model.page.PageListCounts" id="pageLisCountMap">
 		<result property="fid" column="fid" />
+		<result property="enName" column="enName" />
 		<result property="modelName" column="modelName" />
 		<result property="counts" column="counts" />
 	</resultMap>
