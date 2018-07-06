@@ -29,7 +29,7 @@ public class PageListTitleSerializer extends JsonSerializer<String>{
 			//序列对象
 			PageList pageList = (PageList) jg.getCurrentValue();
 			StringBuffer sb = new StringBuffer();
-			sb.append("<a target=\"_blank\"  href=\"detail/"+pageList.getId()+"\" title=\""+pageList.getTitle()+"\">"+pageList.getTitle()+"</a>");
+			sb.append("<a target=\"_blank\"  href=\"detail/"+pageList.getSource()+"/"+pageList.getId()+"\" title=\""+pageList.getTitle()+"\">"+pageList.getTitle()+"</a>");
 			jg.writeString(sb.toString());
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);

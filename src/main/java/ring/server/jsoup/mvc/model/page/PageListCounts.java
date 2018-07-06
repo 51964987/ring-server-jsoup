@@ -4,9 +4,9 @@ public class PageListCounts implements java.io.Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private String fid;
-	private String enName;
-	private String modelName;
-	private String counts;
+	private String source;
+	private String name;
+	private String value;
 	
 	public String getFid() {
 		return fid;
@@ -14,24 +14,22 @@ public class PageListCounts implements java.io.Serializable{
 	public void setFid(String fid) {
 		this.fid = fid;
 	}
-	public String getEnName() {
-		return enName;
+	public String getSource() {
+		return source;
 	}
-	public void setEnName(String enName) {
-		this.enName = enName;
+	public void setSource(String source) {
+		this.source = source;
 	}
-	public String getModelName() {
-		return modelName;
+	public String getName() {
+		return name;
 	}
-	public void setModelName(String modelName) {
-		this.modelName = modelName;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public String getCounts() {
-		return counts;
+	public String getValue() {
+		return value;
 	}
-	public void setCounts(String counts) {
-		this.counts = counts;
+	public void setValue(String value) {
+		this.value = value;
 	}
-	
-	
 }

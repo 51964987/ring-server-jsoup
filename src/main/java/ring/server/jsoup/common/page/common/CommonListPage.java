@@ -2,13 +2,13 @@ package ring.server.jsoup.common.page.common;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import ring.server.jsoup.common.page.IListPage;
+import ring.server.jsoup.common.util.HttpUrlUtil;
 import ring.server.jsoup.mvc.model.page.PageConfig;
 import ring.server.jsoup.mvc.model.page.PageList;
 
@@ -39,7 +40,8 @@ public class CommonListPage implements Callable<Object>,IListPage{
 	@Override
 	public Object call() throws Exception{
 
-		Document doc = Jsoup.connect(url).get();
+		//Document doc = Jsoup.connect(url).get();
+		Document doc = HttpUrlUtil.get(url);
 		
 		//获取最后一页
 		Integer lastPage = 1;
@@ -81,6 +83,18 @@ public class CommonListPage implements Callable<Object>,IListPage{
 					pageList.setYearMonth(m.group(2));
 					pageList.setTarget(m.group(3));
 					pageList.setId(pageList.getTarget());
+				}
+				
+				if(!StringUtils.isEmpty(pageList.getCreateDate())){					
+					Calendar today = Calendar.getInstance();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					if(pageList.getCreateDate().startsWith("今天")){
+						today.set(Calendar.DAY_OF_MONTH, today.get(Calendar.DAY_OF_MONTH)-1);
+						pageList.setCreateDate(sdf.format(today.getTime()));
+					}else if(pageList.getCreateDate().startsWith("昨天")){
+						today.set(Calendar.DAY_OF_MONTH, today.get(Calendar.DAY_OF_MONTH)-2);
+						pageList.setCreateDate(sdf.format(today.getTime()));
+					}
 				}
 				
 				if(!StringUtils.isEmpty(pageList.getId())){				

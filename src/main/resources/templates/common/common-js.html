@@ -30,6 +30,15 @@
 		bindEvents:function(){
 			//返回首页
 			$.Huitotop();
+			/*左右滑动菜单*/
+		    $(".JS-nav-toggle").click(function() {
+				$("body").addClass('sideBox-open');
+		        $(".containBox-bg").height(_bodyHeight).show();
+		    });
+		    $(".containBox-bg").click(function() {
+				$(this).hide();
+				$("body").removeClass('sideBox-open');
+		    });
 			//Echart
 			var _pageObject = this;
 			$.ajaxSetup({
@@ -111,6 +120,131 @@
 				if( option.selected!=null && option.selected!= "undefined"){
 					$(option.select).val(option.selected);
 				}
+			});
+		},
+		echartPieEvent:function(myChart,titleName,data){//饼图
+			var option = {
+				    backgroundColor: {
+				        type: 'pattern',
+				        image: page.waterMarkEvent(),
+				        repeat: 'repeat'
+				    },
+				    tooltip: {},
+				    title: [{
+				        text: titleName,
+				        textStyle:{
+				        	fontSize:20
+				        },
+				        subtext: '总计 ' + data.reduce(function (all, key) {
+				            return all + key.value*1;
+				        }, 0),
+				        x: '50%',
+				        textAlign: 'center'
+				    }],
+				    grid: [{
+				        top: 50,
+				        width: 'auto',
+				        bottom: 20,
+				        left: 10,
+				        containLabel: true
+				    }],
+				    series: [{
+				        type: 'pie',
+				        radius: [0, '50%'],
+				        center: ['50%', '50%'],
+				    	data:data
+				    }] 
+				};
+				if (option && typeof option === "object") {
+				    myChart.setOption(option, true);
+				}
+				
+				myChart.on("click",function(param){
+					//location.href="/page/list?source=T66Y&fid=7&server=1";
+					top.location.href="/page/list?source="+param.data.source+"&fid="+param.data.fid+"&server=1";
+				});
+		},
+		echartBarEvent:function(myChart,titleName,data){//横向柱状图
+			var option = {
+			    backgroundColor: {
+			        type: 'pattern',
+			        image: page.waterMarkEvent(),
+			        repeat: 'repeat'
+			    },
+			    tooltip: {},
+			    title: [{
+			        text: titleName,
+			        textStyle:{
+			        	fontSize:20
+			        },
+			        subtext: '总计 ' + data.reduce(function (all, key) {
+			            return all + key.value*1;
+			        }, 0),
+			        x: '50%',
+			        textAlign: 'center'
+			    }],
+			    grid: [{
+			        top: 50,
+			        width: 'auto',
+			        bottom: 20,
+			        left: 10,
+			        containLabel: true
+			    }],
+			    xAxis: [{
+			        type: 'value',
+			        max: Math.max.apply(null,Object.keys(data).map(function (key) {
+			            return data[key].value;
+			        })),
+			        splitLine: {
+			            show: false
+			        }
+			    }],
+			    yAxis: [{
+			        type: 'category',
+			        data: Object.keys(data).map(function (key) {
+			            return data[key].name;
+			        }),
+			        axisLabel: {
+			            interval: 0,
+			            rotate: 30
+			        },
+			        splitLine: {
+			            show: false
+			        }
+			    }],
+			    series: [{
+			        type: 'bar',
+			        stack: 'chart',
+			        z: 3,
+			        label: {
+			            normal: {
+			                position: 'right',
+			                show: true
+			            }
+			        },
+			        data: data
+			    }, {
+			        type: 'bar',
+			        stack: 'chart',
+			        silent: true,
+			        itemStyle: {
+			            normal: {
+			                color: '#eee'
+			            }
+			        },
+			        data: Object.keys(data).map(function (key) {
+			            return Math.max.apply(null,Object.keys(data).map(function (key) {
+			                return data[key].value;
+			            }))-data[key].value;
+			        })
+			    }]
+			};
+			if (option && typeof option === "object") {
+			    myChart.setOption(option, true);
+			}
+			
+			myChart.on("click",function(param){
+				top.location.href="/page/list?source="+param.data.source+"&fid="+param.data.fid+"&server=1";
 			});
 		}
 	});

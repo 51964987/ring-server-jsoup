@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ring.server.jsoup.common.page.IPagination;
+import ring.server.jsoup.common.util.HttpUrlUtil;
 import ring.server.jsoup.mvc.dao.page.PageListMapper;
 import ring.server.jsoup.mvc.model.page.PageConfig;
 import ring.server.jsoup.mvc.model.page.PageList;
@@ -37,7 +37,9 @@ public class CommonPagination implements IPagination{
 			//PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
 			
 			//获取最后一页
-			Document doc = Jsoup.connect(url).get();
+			//Document doc = Jsoup.connect(url).get();
+			Document doc = HttpUrlUtil.get(url);
+			
 			Element lastATag = doc.getElementById(pageConfig.getLastPageGet());
 			String href = lastATag.attr(pageConfig.getLastPageAttr());
 			Pattern p = Pattern.compile(pageConfig.getLastPagePattern());

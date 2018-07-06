@@ -25,7 +25,7 @@
 		<if test=" fid != null and fid != '' ">
 			AND t.fid = #{fid}
 		</if>
-		ORDER BY t.clickNum DESC
+		ORDER BY t.ts DESC,t.createDate DESC
 	</select>
 
 	<resultMap type="ring.server.jsoup.mvc.model.page.PageList" id="pageListMap">
@@ -42,18 +42,18 @@
 	</resultMap>
 	
 	<select id="findCounts" resultMap="pageLisCountMap">
-		SELECT t.fid,m.`enName`,m.`modelName`,COUNT(1) AS counts FROM page_list t 
+		SELECT t.fid,m.`enName` as source,m.`modelName` as name,COUNT(1) AS value FROM page_list t 
 		LEFT JOIN page_model m ON t.`source` = m.`enName`
 		WHERE t.`fid` = m.`model`
 		GROUP BY t.fid
-		ORDER BY counts ASC
+		ORDER BY value ASC
 	</select>
 	
 	<resultMap type="ring.server.jsoup.mvc.model.page.PageListCounts" id="pageLisCountMap">
 		<result property="fid" column="fid" />
-		<result property="enName" column="enName" />
-		<result property="modelName" column="modelName" />
-		<result property="counts" column="counts" />
+		<result property="source" column="source" />
+		<result property="name" column="name" />
+		<result property="value" column="value" />
 	</resultMap>
 
 </mapper>

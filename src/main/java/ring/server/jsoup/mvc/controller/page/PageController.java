@@ -57,8 +57,8 @@ public class PageController {
 		}
 	}
 
-	@RequestMapping(value="detail/{id}/{source}",method=RequestMethod.GET)
-	public ModelAndView detail(@PathVariable("id") String id,@PathVariable("source") String source) throws Exception{
+	@RequestMapping(value="detail/{source}/{id}",method=RequestMethod.GET)
+	public ModelAndView detail(@PathVariable("source") String source,@PathVariable("id") String id) throws Exception{
 		ModelAndView model = new ModelAndView("page/page-detail");
 		PageList pageList = pageListServiceImpl.findById(id);
 		PageConfig pageConfig = pageConfigServiceImpl.get(source);

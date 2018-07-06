@@ -20,24 +20,21 @@
 		<nav class="breadcrumb" style="background: #f5f5f5">
 			<div class="container">
 				<i class="Hui-iconfont">&#xe67f;</i>
-				<a href="/" class="c-primary">首页</a>
+				<a th:href="@{/index}" class="c-primary">首页</a>
 			</div>
 		</nav>
 		<div class="container ui-sortable">
-			<h1>Hi，RING</h1>
+			<!-- <h1>Hi，RING</h1> -->
 			<!-- <p>开始前端之旅！</p> -->
-			<div class="panel panel-default">
+			<div class="panel panel-default mt-10">
 				<div class="panel-header">本地统计</div>
 				<div class="panel-body">
-					<div id="container" data-dom="echarts" style="height:455px"></div>		
-				</div>
-			</div>
-			<div class="panel panel-default mt-20">
-				<div class="panel-header">远程统计</div>
-				<div class="panel-body">
-					<div id="demo" style="height:455px;width: 100%">
-						<img alt="" id="tmpImg" src="" style="border: 1px solid red">
-					</div>		
+					<div class="container-fluid"  style="height:425px;">						
+						<div class="row" style="height:100%">
+							<div id="bar" class="water col-md-6" style="height:100%;display:block;margin: 0px;padding: 0px;"></div>
+							<div id="pie" class="water col-md-6" style="height:100%;display:block;margin: 0px;padding: 0px;"></div>
+						</div>		
+					</div>
 				</div>
 			</div>
 			<div th:replace="/common/common-footer :: onloadFooter"></div>
@@ -52,113 +49,16 @@
 $(function(){
 	
 	var canvas = page.waterMarkEvent();
-	$("#tmpImg")[0].src = canvas.toDataURL("image/png");
-	$("#demo").css("background-image","url('"+canvas.toDataURL("image/png")+"')");
+	//$("img").attr("src",canvas.toDataURL("image/png"));
+	$(".water").css("background-image","url('"+canvas.toDataURL("image/png")+"')");
 	//document.getElementById('demo').style.backgroundImage = 'url("' + canvas.toDataURL() + '")';
 	
-	var dom = document.getElementById("container");
-	var myChart = echarts.init(dom);
+	var barChart = echarts.init(document.getElementById("bar"));
+	var peiChart = echarts.init(document.getElementById("pie"));
 	
 	$.post("page/counts",function(data){		
-		
-		option = null;
-
-		var downloadJson = {};
-		var total=0;
-		for(var i=0;i<data.length;i++){
-			var sum = data[i]['counts'];
-			downloadJson[data[i]['modelName']]=sum;
-			total+=sum*1;
-		}
-		
-		var builderJson = {
-		  "all": total,
-		  "charts": downloadJson
-		};
-		option = {
-		    backgroundColor: {
-		        type: 'pattern',
-		        image: page.waterMarkEvent(),
-		        repeat: 'repeat'
-		    },
-		    tooltip: {},
-		    title: [{
-		        text: '草榴社区',
-		        subtext: '总计 ' + builderJson.all,
-		        x: '50%',
-		        textAlign: 'center'
-		    }],
-		    grid: [{
-		        top: 50,
-		        width: '50%',
-		        bottom: 20,
-		        left: 10,
-		        containLabel: true
-		    }],
-		    xAxis: [{
-		        type: 'value',
-		        max: builderJson.all,
-		        splitLine: {
-		            show: false
-		        }
-		    }],
-		    yAxis: [{
-		        type: 'category',
-		        data: Object.keys(builderJson.charts),
-		        axisLabel: {
-		            interval: 0,
-		            rotate: 30
-		        },
-		        splitLine: {
-		            show: false
-		        }
-		    }],
-		    series: [{
-		        type: 'bar',
-		        stack: 'chart',
-		        z: 3,
-		        label: {
-		            normal: {
-		                position: 'right',
-		                show: true
-		            }
-		        },
-		        data: Object.keys(builderJson.charts).map(function (key) {
-		            return builderJson.charts[key];
-		        })
-		    }, {
-		        type: 'bar',
-		        stack: 'chart',
-		        silent: true,
-		        itemStyle: {
-		            normal: {
-		                color: '#eee'
-		            }
-		        },
-		        data: Object.keys(builderJson.charts).map(function (key) {
-		            return builderJson.all - builderJson.charts[key];
-		        })
-		    }, {
-		        type: 'pie',
-		        radius: [0, '60%'],
-		        center: ['75%', '50%'],
-		        data: Object.keys(downloadJson).map(function (key) {
-		            return {
-		                name: key.replace('.js', ''),
-		                value: downloadJson[key]
-		            }
-		        })
-		    }]
-		};
-		if (option && typeof option === "object") {
-		    myChart.setOption(option, true);
-		}
-		
-		myChart.on("click",function(param){
-			alert(param.name);
-			//location.href="/page/list?source=T66Y&fid=7&server=1";
-		});
-		
+		page.echartBarEvent(barChart,"排位",data);
+		page.echartPieEvent(peiChart,"分布",data);
 	});
 });
 </script>
