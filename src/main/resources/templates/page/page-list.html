@@ -1,84 +1,77 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/common/common-head :: onloadHead('首页')"></head>
+<head th:replace="/common/common-head :: onloadHead('列表')"></head>
 <link rel="stylesheet" type="text/css" th:href="@{/ring-ui/css/ring-ui.css}" />
 <body>
-<div class="sideBox">
-	<ul class="nav navbar-nav pt-20">
-		<li><a href="/about.html">登录/注册</a></li>
-		<li><a href="/jiansuo.html">技术检索</a></li>
-		<li><a href="/about.html">关于我们</a></li>
-		<li><a href="/#">联系我们</a></li>
-		<li><a href="/#">隐私保护</a></li>
-		<li><a href="/#">免责声明</a></li>
-		<li><a href="/#">支付方式</a></li>
-	</ul>
-</div>
-<div class="containBox">
-    <div class="containBox-bg"></div>
-	<div th:replace="/common/common-header :: onloadHeader('/page/list')"></div>
-	<div class="wap-container">
-		<nav class="breadcrumb" style="background: #f5f5f5">
-			<div class="container">
-				<i class="Hui-iconfont">&#xe67f;</i>
-				<a href="//" class="c-primary">首页</a>
-				<span class="c-gray en">&gt;</span>
-				<a href="/#">列表</a>
+
+<header  th:replace="/common/common-header :: onloadHeader('/page/list')"></header>
+
+<nav class="breadcrumb">
+	<div class="container">
+		<i class="Hui-iconfont">&#xe67f;</i>
+		<a href="//" class="c-primary">首页</a>
+		<span class="c-gray en">&gt;</span>
+		<a href="/#">列表</a>
+	</div>
+</nav>
+
+<div class="wap-container">
+	<div class="container">
+		<div class="row clearfix cases-list clearfix mt-10">
+			<form id="form_page"  method="POST">
+			<div class="item col-xs-12 col-sm-6 col-md-4 col-lg-2 mb-5">
+				<span class="select-box">
+					<select class="select" size="1" id="source" name="source">
+						<option value="">选择数据来源</option>
+					</select>
+				</span>
 			</div>
-		</nav>
-		
-		<div class="container ui-sortable">
-			<!-- <h1>Hi，RING</h1> -->
-			<!-- <p>开始前端之旅！</p> -->
-			<div class="panel panel-default mt-10" style="border: 0px;padding: 0px;margin: 0px;">
-				<!-- <div class="panel-header">本地统计</div> -->
-				<div class="panel-body">
-					<div class="container-fluid"  style="margin-bottom: 30px">						
-						<div class="row">
-							<form id="form_page"  method="POST">
-								<span class="select-box" style="width: 120px">
-									<select class="select" size="1" id="source" name="source">
-										<option value="">选择数据来源</option>
-									</select>
-								</span>
-								<span class="select-box" style="width: 120px">
-									<select class="select" size="1" id="fid" name="fid">
-										<option value="" selected>选择模块</option>
-									</select>
-								</span>
-								<span class="select-box" style="width: 120px">
-									<select class="select" size="1" id="server" name="server">
-										<option value="1" selected>本地数据服务器</option>
-										<option value="2">来源数据服务器</option>
-									</select>
-								</span>
-								<input type="text" name="title" placeholder=" 输入标题模糊查询" style="width:250px" class="input-text">
-								<button class="btn btn-success"  type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索列表</button>
-							</form>
-						</div>		
-						<div class="row mt-10">
-							<table class="table table-border table-bordered table-bg table-hover table-sort">
-								<thead>
-									<tr class="text-c">
-										<th data-mDataProp="title" width="30%">标题</th>
-										<th data-mDataProp="author" width="10%">作者</th>
-										<th data-mDataProp="createDate" width="8%">发布日期</th>
-										<th data-mDataProp="clickNum" width="6%">点击量</th>
-										<th data-mDataProp="modelName" width="10%">模块</th>
-										<th data-mDataProp="url" width="18%">访问地址</th>
-										<th data-mDataProp="ts" width="7%">批次日期</th>
-										<th data-mDataProp="oper" >操作</th>
-									</tr>
-								</thead>
-							</table>
-						</div>		
-					</div>
-				</div>
+			<div class="item col-xs-12 col-sm-6 col-md-4 col-lg-2 mb-5">
+				<span class="select-box">
+					<select class="select" size="1" id="fid" name="fid">
+						<option value="" selected>选择模块</option>
+					</select>
+				</span>
 			</div>
-			<div th:replace="/common/common-footer :: onloadFooter"></div>
+			<div class="item col-xs-12 col-sm-6 col-md-4 col-lg-2 mb-5">
+				<span class="select-box">
+					<select class="select" size="1" id="server" name="server">
+						<option value="1" selected>本地数据服务器</option>
+						<option value="2">来源数据服务器</option>
+					</select>
+				</span>
+			</div>
+			<div class="item col-xs-12 col-sm-6 col-md-4 col-lg-2 mb-5">
+				<input type="text" name="title" placeholder=" 输入标题模糊查询" class="input-text">
+			</div>
+			<div class="item col-xs-12 col-sm-6 col-md-4 col-lg-1 mb-5">
+				<button class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索列表</button>
+			</div>
+			</form>
+		</div>
+		<div class="row clearfix cases-list clearfix mb-10">
+			<div class="item col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<table class="table table-border table-bordered table-bg table-hover table-sort" style="width:100%">
+					<thead>
+						<tr class="text-c">
+							<th data-mDataProp="title" width="30%">标题</th>
+							<th data-mDataProp="author" width="10%">作者</th>
+							<th data-mDataProp="createDate" width="8%">发布日期</th>
+							<th data-mDataProp="clickNum" width="6%">点击量</th>
+							<th data-mDataProp="modelName" width="10%">模块</th>
+							<th data-mDataProp="url" width="18%">访问地址</th>
+							<th data-mDataProp="ts" width="7%">批次日期</th>
+							<th data-mDataProp="oper"  width="11%">操作</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
 		</div>
 	</div>
 </div>
+
+<footer th:replace="/common/common-footer :: onloadFooter"></footer>
+
 <div th:replace="/common/common-js :: onloadJS"></div>
 <div th:replace="/common/common-dataTables :: onloadDataTables('#form_page','.table-sort','list')"></div>
 <script type="text/javascript" th:inline="javascript" 
@@ -100,9 +93,9 @@ $(document).ready(function(){
 					data:{"source":$("#source").val()},
 					selected:[[${fid}]],
 					events:function(option){
-						if($("#source").val() != ''){							
+						/* if([[${source}]] != ''){							
 							$("#form_page").find("[type='submit']").click();
-						}
+						} */
 					}
 				});
 			}).val([[${source}]]).change();
@@ -113,4 +106,3 @@ $(document).ready(function(){
 </script>
 </body>
 </html>
-<!--H-ui前端框架提供前端技术支持 h-ui.net @2017-01-01 -->

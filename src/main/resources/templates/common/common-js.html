@@ -27,18 +27,27 @@
 		init:function(){
 			this.bindEvents();
 		},
+		footerFixedEvent:function(){
+			//
+			/* if($(document.body).outerHeight(true)<767){				
+				$(".footer").attr({"style":"position:fixed;bottom:0px"});
+			}else{				
+				$(".footer").removeAttr("style");
+			} */
+		},
 		bindEvents:function(){
+			var _this = this;
 			//返回首页
 			$.Huitotop();
 			/*左右滑动菜单*/
-		    $(".JS-nav-toggle").click(function() {
+		    /* $(".JS-nav-toggle").click(function() {
 				$("body").addClass('sideBox-open');
 		        $(".containBox-bg").height(_bodyHeight).show();
 		    });
 		    $(".containBox-bg").click(function() {
 				$(this).hide();
 				$("body").removeClass('sideBox-open');
-		    });
+		    }); */
 			//Echart
 			var _pageObject = this;
 			$.ajaxSetup({
@@ -48,12 +57,13 @@
 					_pageObject.openEchartLoadingEvent();
 				},
 				complete:function(data){
+					_pageObject.footerFixedEvent();
 					_pageObject.closeEchartLoadingEvent();
 				},
 				error:function(e){
+					_pageObject.footerFixedEvent();
 					_pageObject.closeEchartLoadingEvent();
 					//e.statusText()
-
 				}
 			});
 		},
@@ -165,6 +175,13 @@
 				});
 		},
 		echartBarEvent:function(myChart,titleName,data){//横向柱状图
+			var _max = Math.max.apply(null,Object.keys(data).map(function (key) {
+                return data[key].value;
+            }));
+			var _all = data.reduce(function (all, key) {
+	            return all + key.value*1;
+	        }, 0);
+			_max = _max+3000;//X轴步长
 			var option = {
 			    backgroundColor: {
 			        type: 'pattern',
@@ -177,9 +194,7 @@
 			        textStyle:{
 			        	fontSize:20
 			        },
-			        subtext: '总计 ' + data.reduce(function (all, key) {
-			            return all + key.value*1;
-			        }, 0),
+			        subtext: '总计 ' + _all,
 			        x: '50%',
 			        textAlign: 'center'
 			    }],
@@ -192,9 +207,7 @@
 			    }],
 			    xAxis: [{
 			        type: 'value',
-			        max: Math.max.apply(null,Object.keys(data).map(function (key) {
-			            return data[key].value;
-			        })),
+			        max: _max,
 			        splitLine: {
 			            show: false
 			        }
@@ -233,9 +246,7 @@
 			            }
 			        },
 			        data: Object.keys(data).map(function (key) {
-			            return Math.max.apply(null,Object.keys(data).map(function (key) {
-			                return data[key].value;
-			            }))-data[key].value;
+			            return _max-data[key].value;
 			        })
 			    }]
 			};

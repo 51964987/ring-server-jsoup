@@ -7,3 +7,21 @@ div.dataTables_info {float: left;}
 div.dataTables_paginate {float: right;}
 table tr td:last-child{text-align: center}
 /*-- END dataTables --*/
+
+body {
+    min-height: 100%;
+    position: relative;
+    font-size: 14px;
+    color: #333;
+    background-color: #fff;
+}
+.breadcrumb {
+    position: relative;
+    z-index: 98;
+    background: #f5f5f5;
+}
+@media (max-width: 767px){	
+	.wap-container {
+	    height:auto;
+	}
+}
