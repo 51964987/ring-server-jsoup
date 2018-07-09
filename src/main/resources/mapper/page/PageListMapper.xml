@@ -12,7 +12,7 @@
 	
 	<select id="findById" resultMap="pageListMap">
 		SELECT t.*,t.id as oper FROM page_list t
-		WHERE t.id = #{id}
+		WHERE t.id = #{id} and t.source = #{source}
 	</select>
 	
 	<select id="findList" resultType="ring.server.jsoup.mvc.model.page.PageList" resultMap="pageListMap">

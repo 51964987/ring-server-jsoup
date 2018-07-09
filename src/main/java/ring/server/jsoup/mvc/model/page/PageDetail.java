@@ -1,9 +1,18 @@
 package ring.server.jsoup.mvc.model.page;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import ring.server.jsoup.mvc.jsonSerializer.detail.PageDetailOperSerializer;
+import ring.server.jsoup.mvc.jsonSerializer.detail.PageDetailTitleSerializer;
+
 public class PageDetail implements java.io.Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private String id;
+	@JsonSerialize(using=PageDetailTitleSerializer.class)
 	private String title;
 	private String content;
 	private String images;
@@ -12,11 +21,19 @@ public class PageDetail implements java.io.Serializable{
 	private String source;
 	private String url;
 	private String sort;
-	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+	private Date ts;
+	@JsonSerialize(using=PageDetailOperSerializer.class)
+	private String oper;
 	private String fid;		//当前模块编号，用于展示，不保存数据
 	private String curpage;	//当前页，用于展示，不保存数据
 	private String code;	//状态代码，用于展示，不保存数据
 	private String message;	//代码信息，用于展示，不保存数据
+	
+	private String author;	//LEFT JOIN page_list
+	private String createDate;	//LEFT JOIN page_list
+	private String clickNum;	//LEFT JOIN page_list
+	private String modelName;	//LEFT JOIN page_model
 	
 	public String getId() {
 		return id;
@@ -96,5 +113,37 @@ public class PageDetail implements java.io.Serializable{
 	public void setTorrent(String torrent) {
 		this.torrent = torrent;
 	}
-	
+	public String getAuthor() {
+		return author;
+	}
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	public String getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+	public String getClickNum() {
+		return clickNum;
+	}
+	public void setClickNum(String clickNum) {
+		this.clickNum = clickNum;
+	}
+	public String getModelName() {
+		return modelName;
+	}
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+	public Date getTs() {
+		return ts;
+	}
+	public void setTs(Date ts) {
+		this.ts = ts;
+	}
+	public String getOper() {
+		return this.id;
+	}
 }

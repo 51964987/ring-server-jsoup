@@ -1,4 +1,4 @@
-package ring.server.jsoup.mvc.jsonSerializer;
+package ring.server.jsoup.mvc.jsonSerializer.detail;
 
 import java.io.IOException;
 
@@ -10,7 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-import ring.server.jsoup.mvc.model.page.PageList;
+import ring.server.jsoup.mvc.model.page.PageDetail;
 
 /**
  * 通用序列化
@@ -18,7 +18,7 @@ import ring.server.jsoup.mvc.model.page.PageList;
  * @date 2017年12月22日 下午4:08:48
  * @version V1.0
  */
-public class PageListTitleSerializer extends JsonSerializer<String>{
+public class PageDetailTitleSerializer extends JsonSerializer<String>{
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
@@ -27,9 +27,9 @@ public class PageListTitleSerializer extends JsonSerializer<String>{
 			throws IOException, JsonProcessingException {
 		try {
 			//序列对象
-			PageList pageList = (PageList) jg.getCurrentValue();
+			PageDetail pageDetail = (PageDetail) jg.getCurrentValue();
 			StringBuffer sb = new StringBuffer();
-			sb.append("<a target=\"_blank\"  href=\"detail/"+pageList.getSource()+"/"+pageList.getId()+"\" title=\""+pageList.getTitle()+"\">"+pageList.getTitle()+"</a>");
+			sb.append("<a target=\"_blank\"  href=\"/page/detail/"+pageDetail.getSource()+"/"+pageDetail.getId()+"\" title=\""+pageDetail.getTitle()+"\">"+pageDetail.getTitle()+"</a>");
 			jg.writeString(sb.toString());
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);

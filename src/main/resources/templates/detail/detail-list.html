@@ -1,17 +1,17 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/common/common-head :: onloadHead('列表')"></head>
+<head th:replace="/common/common-head :: onloadHead('浏览过的页面')"></head>
 <link rel="stylesheet" type="text/css" th:href="@{/ring-ui/css/ring-ui.css}" />
 <body>
 
-<header  th:replace="/common/common-header :: onloadHeader('/page/list')"></header>
+<header  th:replace="/common/common-header :: onloadHeader('/detail/list')"></header>
 
 <nav class="breadcrumb">
 	<div class="container">
 		<i class="Hui-iconfont">&#xe67f;</i>
 		<a class="c-primary">首页</a>
 		<span class="c-gray en">&gt;</span>
-		<a href="/#">列表</a>
+		<a>浏览过的页面</a>
 	</div>
 </nav>
 
@@ -34,14 +34,6 @@
 				</span>
 			</div>
 			<div class="item col-xs-12 col-sm-6 col-md-4 col-lg-2 mb-5">
-				<span class="select-box">
-					<select class="select" size="1" id="server" name="server">
-						<option value="1" selected>本地数据服务器</option>
-						<option value="2">来源数据服务器</option>
-					</select>
-				</span>
-			</div>
-			<div class="item col-xs-12 col-sm-6 col-md-4 col-lg-2 mb-5">
 				<input type="text" name="title" placeholder=" 输入标题模糊查询" class="input-text">
 			</div>
 			<div class="item col-xs-12 col-sm-6 col-md-4 col-lg-1 mb-5">
@@ -60,7 +52,7 @@
 							<th data-mDataProp="clickNum" width="6%">点击量</th>
 							<th data-mDataProp="modelName" width="10%">模块</th>
 							<th data-mDataProp="url" width="18%">访问地址</th>
-							<th data-mDataProp="ts" width="7%">批次日期</th>
+							<th data-mDataProp="ts" width="7%">浏览日期</th>
 							<th data-mDataProp="oper"  width="11%">操作</th>
 						</tr>
 					</thead>
@@ -79,7 +71,6 @@
 $(document).ready(function(){
 	page.ajaxLoadSelectEvent({
 		select:"#source",
-		//selected:"T66Y",
 		url:/*[[@{/index/change}]]*/,
 		def:{"key":"","value":"选择数据来源"},
 		map:{"key":"enName","value":"cnName"},

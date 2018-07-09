@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
-import ring.server.jsoup.common.page.common.CommonDetailPage;
 import ring.server.jsoup.common.page.common.CommonListPage;
 import ring.server.jsoup.common.page.common.CommonPagination;
 import ring.server.jsoup.mvc.dao.page.PageListMapper;
@@ -60,22 +60,8 @@ public class PageController {
 	@RequestMapping(value="detail/{source}/{id}",method=RequestMethod.GET)
 	public ModelAndView detail(@PathVariable("source") String source,@PathVariable("id") String id) throws Exception{
 		ModelAndView model = new ModelAndView("page/page-detail");
-		PageList pageList = pageListServiceImpl.findById(id);
-		PageConfig pageConfig = pageConfigServiceImpl.get(source);
-		//从page_url获取URL
-		//...
-		// url = "https://cl.wy8.info/"+pageList.getUrl();
-		String url = null;
-		List<PageUrl> pageUrls = pageUrlServiceImpl.findByConfigId(pageConfig.getId());
-		if(pageUrls!=null&&pageUrls.size()>0){
-			//判断是否有效
-			//...
-			url = pageUrls.get(0).getUrl();
-		}
-		url +=pageList.getUrl();
-		model.addObject("url",url);
 		
-		PageDetail pageDetail = new CommonDetailPage(url, pageConfig, pageDetailServiceImpl).call();
+		PageDetail pageDetail = pageListServiceImpl.findDetail(source, id);
 		model.addObject("detail", pageDetail);
 		
 		String imgs = pageDetail.getImages();
@@ -107,6 +93,11 @@ public class PageController {
 			@RequestParam(required=false)String source,
 			PageList pageList
 			) throws Exception{
+		
+		if(StringUtils.isEmpty(source)){
+			return new ResponseEntity<>("数据来源为空", HttpStatus.BAD_REQUEST);
+		}
+		
 		Map<String, Object> map = null;
 		//本地服务器
 		if("1".equals(server)){			

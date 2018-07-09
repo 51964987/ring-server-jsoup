@@ -9,4 +9,5 @@ import ring.server.jsoup.mvc.model.page.PageIndex;
 @Mapper
 public interface PageIndexMapper {
 	List<PageIndex> findAll()throws Exception;
+	List<PageIndex> findList(PageIndex pageIndex)throws Exception;
 }

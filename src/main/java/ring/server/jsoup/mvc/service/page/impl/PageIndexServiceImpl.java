@@ -16,5 +16,9 @@ public class PageIndexServiceImpl implements PageIndexService {
 	public List<PageIndex> findAll() throws Exception {
 		return pageIndexMapper.findAll();
 	}
+	@Override
+	public List<PageIndex> findList(PageIndex pageIndex) throws Exception {
+		return pageIndexMapper.findList(pageIndex);
+	}
 
 }

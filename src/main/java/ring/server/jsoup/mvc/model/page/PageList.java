@@ -2,8 +2,8 @@ package ring.server.jsoup.mvc.model.page;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import ring.server.jsoup.mvc.jsonSerializer.PageListOperSerializer;
-import ring.server.jsoup.mvc.jsonSerializer.PageListTitleSerializer;
+import ring.server.jsoup.mvc.jsonSerializer.page.PageListOperSerializer;
+import ring.server.jsoup.mvc.jsonSerializer.page.PageListTitleSerializer;
 
 public class PageList implements java.io.Serializable{
 	private static final long serialVersionUID = 1L;
@@ -91,10 +91,7 @@ public class PageList implements java.io.Serializable{
 		this.source = source;
 	}
 	public String getOper() {
-		return oper;
-	}
-	public void setOper(String oper) {
-		this.oper = oper;
+		return this.id;
 	}
 	public String getModelName() {
 		return modelName;

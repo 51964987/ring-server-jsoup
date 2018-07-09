@@ -1,6 +1,7 @@
 package ring.server.jsoup.common.page.common;
 
 import java.io.File;
+import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,6 +65,8 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 		pageDetail.setFid(fid);
 		pageDetail.setCurpage(curpage);
 		pageDetail.setSource(pageConfig.getEnName());
+		pageDetail.setTs(new Date(System.currentTimeMillis()));
+		pageDetail.setSource(pageConfig.getEnName());
 		
 		//线程名称
 		Thread.currentThread().setName("FID_"+fid+"_PAGE_"+curpage+"_TID="+tid);
@@ -107,7 +110,7 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 			if(m.find()){
 				targetFold = m.group(1);
 				pageDetail.setUrl(m.group());
-				pageDetail.setSort(m.group(2));
+				pageDetail.setId(m.group(2));
 			}
 			if(StringUtils.isEmpty(title)){
 				title = doc.getElementsByTag("title").text().replace(" ", "").split("-")[0];

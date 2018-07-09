@@ -7,6 +7,17 @@
 		SELECT * FROM page_index
 	</select>
 	
+	<select id="findList" resultType="ring.server.jsoup.mvc.model.page.PageIndex" resultMap="pageIndexMap">
+		SELECT t.* FROM page_index t
+		WHERE 1 = 1
+		<if test=" enName != null and enName != '' ">
+			AND t.enName like '%${enName}%'
+		</if>
+		<if test=" cnName != null and cnName != '' ">
+			AND t.cnName like '%${cnName}%'
+		</if>
+	</select>
+	
 	<resultMap type="ring.server.jsoup.mvc.model.page.PageIndex" id="pageIndexMap">
 		<result property="enName" column="enName" />
 		<result property="domain" column="domain" />

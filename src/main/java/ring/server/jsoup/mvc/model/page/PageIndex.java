@@ -6,6 +6,9 @@ public class PageIndex implements java.io.Serializable{
 	private String enName;
 	private String domain;
 	private String cnName;
+	
+	private String oper;
+	
 	public String getEnName() {
 		return enName;
 	}
@@ -23,6 +26,9 @@ public class PageIndex implements java.io.Serializable{
 	}
 	public void setCnName(String cnName) {
 		this.cnName = cnName;
+	}
+	public String getOper() {
+		return this.enName;
 	}
 	
 }
