@@ -5,11 +5,11 @@
 	
 	<select id="findByConfigId" resultMap="pageUrlMap">
 		SELECT t.* FROM page_url t
-		WHERE t.config_id = #{configId}
+		WHERE t.enName = #{configId}
 	</select>
 	
 	<resultMap type="ring.server.jsoup.mvc.model.page.PageUrl" id="pageUrlMap">
-		<result property="configId" column="config_id" />
+		<result property="enName" column="enName" />
 		<result property="url" column="url" />
 	</resultMap>
 	

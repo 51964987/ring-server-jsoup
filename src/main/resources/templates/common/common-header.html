@@ -14,7 +14,7 @@
 					<li th:class="${url} eq '/page/list' ? 'current' : ''"><a th:href="@{/page/list}">列表</a></li>
 					<li th:class="${url} eq '/detail/list' ? 'current' : ''"><a th:href="@{/detail/list}">浏览过的页面</a></li>
 					<li  th:class="${url} eq '/config/*' ? 'dropDown dropDown_hover current' : 'dropDown dropDown_hover'" >
-						<a href="/javascript:;" class="dropDown_A">数据源配置 <i class="Hui-iconfont">&#xe6d5;</i></a>
+						<a href="javascript:;" class="dropDown_A">数据源配置 <i class="Hui-iconfont">&#xe6d5;</i></a>
 						<ul class="dropDown-menu menu radius box-shadow">
 							<li><a  th:href="@{/config/index}">数据源管理</a></li>
 							<li><a  th:href="@{/config/list}">网站列表配置</a></li>

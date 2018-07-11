@@ -1,5 +1,9 @@
 package ring.server.jsoup.mvc.model.page;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import ring.server.jsoup.mvc.jsonSerializer.index.PageIndexOperSerializer;
+
 public class PageIndex implements java.io.Serializable{
 	private static final long serialVersionUID = 1L;
 	
@@ -7,6 +11,7 @@ public class PageIndex implements java.io.Serializable{
 	private String domain;
 	private String cnName;
 	
+	@JsonSerialize(using=PageIndexOperSerializer.class)
 	private String oper;
 	
 	public String getEnName() {

@@ -13,6 +13,18 @@ public class PageIndexServiceImpl implements PageIndexService {
 	@Autowired
 	private PageIndexMapper pageIndexMapper;
 	@Override
+	public int delete(String id) throws Exception {
+		return pageIndexMapper.delete(id);
+	}
+	@Override
+	public int edit(PageIndex pageIndex) throws Exception {
+		return pageIndexMapper.edit(pageIndex);
+	}
+	@Override
+	public int save(PageIndex pageIndex) throws Exception {
+		return pageIndexMapper.save(pageIndex);
+	}
+	@Override
 	public List<PageIndex> findAll() throws Exception {
 		return pageIndexMapper.findAll();
 	}

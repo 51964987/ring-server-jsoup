@@ -37,4 +37,9 @@ public class PageDetailServiceImpl implements PageDetailService{
 		return pageDetailMapper.findById(source, id);
 	}
 
+	@Override
+	public int delete(String source, String id) throws Exception {
+		return pageDetailMapper.delete(source, id);
+	}
+
 }

@@ -2,19 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="ring.server.jsoup.mvc.dao.page.PageIndexMapper">
 	
+	<delete id="delete">  
+        DELETE FROM page_index WHERE enName=#{id}
+	</delete> 
+		
+	<update id="edit">  
+        UPDATE page_index SET cnName= #{cnName} WHERE enName=#{enName}
+	</update> 
+	
+	<insert id="save">  
+        INSERT INTO page_index(enName,cnName) VALUES (#{enName},#{cnName})   
+	</insert> 
 	
 	<select id="findAll" resultMap="pageIndexMap">
 		SELECT * FROM page_index
 	</select>
 	
 	<select id="findList" resultType="ring.server.jsoup.mvc.model.page.PageIndex" resultMap="pageIndexMap">
-		SELECT t.* FROM page_index t
+		SELECT t.enName,cnName,f.url AS domain
+		FROM page_index t
+		LEFT JOIN (SELECT tt.enName,GROUP_CONCAT(tt.url) AS url FROM page_url tt GROUP BY tt.enName) f ON t.enName = f.enName
 		WHERE 1 = 1
 		<if test=" enName != null and enName != '' ">
-			AND t.enName like '%${enName}%'
-		</if>
-		<if test=" cnName != null and cnName != '' ">
-			AND t.cnName like '%${cnName}%'
+			AND (t.enName like '%${enName}%'
+			OR t.cnName like '%${enName}%'
+			OR f.url like '%${enName}%')
 		</if>
 	</select>
 	

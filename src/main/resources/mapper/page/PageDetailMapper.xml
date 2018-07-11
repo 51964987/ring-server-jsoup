@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="ring.server.jsoup.mvc.dao.page.PageDetailMapper">
-	<!-- 增加 -->
+
 	<insert id="add" parameterType="ring.server.jsoup.mvc.model.page.PageDetail">
 		REPLACE INTO page_detail (id,title,content,images,magnet,torrent,url,source,ts)
 		VALUES(#{id},#{title},#{content},#{images},#{magnet},#{torrent},#{url},#{source},#{ts})
 	</insert>
+	
+	<delete id="delete">
+		DELETE FROM page_detail WHERE id = #{id} and source = #{source}
+	</delete>
 	
 	<select id="findList" resultType="ring.server.jsoup.mvc.model.page.PageDetail" resultMap="pageDetailMap">
 		SELECT f.`author`,f.`createDate`,f.`clickNum`,m.`modelName`,t.* FROM page_detail t

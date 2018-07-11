@@ -31,10 +31,11 @@ public class PageDetailOperSerializer extends JsonSerializer<String>{
 			PageDetail pageDetail = (PageDetail) jg.getCurrentValue();
 			StringBuffer sb = new StringBuffer();
 			if(StringUtils.isEmpty(pageDetail.getImages())){				
-				sb.append("<a style=\"text-decoration:none;font-size: 18px;cursor: default;color: #ddd;\" title=\"图片\"><i class=\"Hui-iconfont\">&#xe613;</i></a>");
+				sb.append("<a style=\"text-decoration:none;font-size: 18px;cursor: default;color: #ddd;\" data-type=\"imgs\"  data-title=\""+pageDetail.getTitle()+"\" title=\"图片\"><i class=\"Hui-iconfont\">&#xe613;</i></a>");
 			}else{
-				sb.append("<a style=\"text-decoration:none;font-size: 18px;\" target=\"_blank\"  href=\"imgs/"+pageDetail.getSource()+"/"+pageDetail.getId()+"\" title=\"图片\"><i class=\"Hui-iconfont\">&#xe613;</i></a>");
+				sb.append("<a style=\"text-decoration:none;font-size: 18px;\" target=\"_blank\" data-type=\"imgs\" data-title=\""+pageDetail.getTitle()+"\" data-href=\"imgs/"+pageDetail.getSource()+"/"+pageDetail.getId()+"\" title=\"图片\"><i class=\"Hui-iconfont\">&#xe613;</i></a>");
 			}
+			sb.append("<a style=\"text-decoration:none;font-size: 18px;margin-left:5px\" data-type=\"delete\" target=\"_blank\" data-title=\""+pageDetail.getTitle()+"\"  data-href=\"delete/"+pageDetail.getSource()+"/"+pageDetail.getId()+"\" title=\"删除\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a>");
 			jg.writeString(sb.toString());
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);

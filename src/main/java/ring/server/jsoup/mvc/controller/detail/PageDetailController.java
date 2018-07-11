@@ -47,6 +47,12 @@ public class PageDetailController {
 		return model;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="delete/{source}/{id}",method=RequestMethod.POST)
+	public Object delete(@PathVariable("source") String source,@PathVariable("id") String id) throws Exception{
+		return new ResponseEntity<>(pageDetailServiceImpl.delete(source, id), HttpStatus.OK);
+	}
+	
 	@RequestMapping(value="list",method=RequestMethod.GET)
 	public ModelAndView list(){
 		return new ModelAndView("detail/detail-list");

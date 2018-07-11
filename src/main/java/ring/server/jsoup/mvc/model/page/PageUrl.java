@@ -4,7 +4,7 @@ public class PageUrl implements java.io.Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
-	private String configId;
+	private String enName;
 	private String url;
 	
 	public Integer getId() {
@@ -13,11 +13,11 @@ public class PageUrl implements java.io.Serializable{
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getConfigId() {
-		return configId;
+	public String getEnName() {
+		return enName;
 	}
-	public void setConfigId(String configId) {
-		this.configId = configId;
+	public void setEnName(String enName) {
+		this.enName = enName;
 	}
 	public String getUrl() {
 		return url;

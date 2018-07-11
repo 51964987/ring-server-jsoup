@@ -3,24 +3,51 @@
 <body>
 <div th:fragment="onloadDataTables(form,table,url)">
 <script type="text/javascript" th:src="@{/lib/datatables/1.10.15/jquery.dataTables.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}"></script>
 <script type="text/javascript" th:inline="javascript">
 	var table;
 	$([[${form}]]).submit(function (event) {/* .find("[type='submit']") */
 	   event.preventDefault();
 	   if(typeof jQuery.data(this, "init") == 'undefined') {
-		   table.init();
+		   table.fnDraw(true);
 		   jQuery.data(this, "init",true);
 	   }else{
-		   table.fnDraw();
+		   table.fnDraw(false);
 	   }
 	});	
 	function Table(){};
 	$.extend(Table.prototype,{
 		init:function(){
-			this.bindEvents();
+			
 		},
-		fnDraw:function(){
-			$([[${table}]]).dataTable().fnDraw(false);
+		showModal:function(aData){
+			$("body").find(".modal form")[0].reset();
+			if(aData == null || aData == "undefined"){
+				$("#oper").val("add");
+				$("#opertext").text("添加");
+			}else{
+				$("body").find(".modal form input").each(function(){
+					var name = $(this).attr("name");
+					$(this).val(aData[name]);				
+				});
+				$("#oper").val("edit");
+				$("#opertext").text("编辑");			
+			}
+			table.showModalCallback(aData);
+			$(".modal").modal("show");
+		},
+		showModalCallback: function(aData){
+			
+		},
+		hideModal:function(){
+			$(".modal").modal("hide");
+		},
+		fnDraw:function(initFlag){
+			if(initFlag){
+				this.bindEvents();
+			}else{				
+				$([[${table}]]).dataTable().fnDraw(false);
+			}
 		},
 		bindEvents:function(){
 			var _aoColumns = [];
@@ -50,7 +77,6 @@
 				"aoColumns" : _aoColumns,
 			    "oLanguage" : {"sUrl":"/lib/datatables/zh_CN.json"},
 			     fnServerData:function(sSource,aoData,fnCallback){
-			    	 //<tbody><tr class="odd"><td valign="top" colspan="8" class="dataTables_empty">表中数据为空</td></tr></tbody>
 			    	$([[${form}]]).find("[name!='']").each(function(){
 						if( $(this).attr("name") != "undefined"){
 							aoData.push({"name":$(this).attr("name"),"value":$(this).val()});
@@ -74,21 +100,77 @@
 						}  
 					});
 			     },
-			     fnDrawCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+			     fnDrawCallback: function () {
 			    	$(".dataTables_length").find("select").each(function(){
 			    		//$(this).parent().addClass("select-box");
 			    		$(this).addClass("select");
-			    	})
+			    	});			    	
 			     },
 			     fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-			    	//...
+			    	 $(nRow).find("a[data-type!='']").each(function(){
+			    		var _title = $(this).attr("data-title");
+			    		var _type = $(this).attr("data-type");
+			    		var _href = $(this).attr("data-href");
+			    		$(this).removeAttr("data-title");
+			    		$(this).removeAttr("data-type");
+			    		$(this).removeAttr("data-href");
+			    		switch(_type){
+			    			case"imgs":
+			    				$(this).click(function(){
+			    					var userAgentInfo = navigator.userAgent;
+			    				    var mobileAgents = [ "Android", "iPhone", "SymbianOS", "Windows Phone", "iPad","iPod"];
+			    				    var mobile_flag = false;
+			    				    //根据userAgent判断是否是手机
+			    				    for (var v = 0; v < mobileAgents.length; v++) {
+			    				        if (userAgentInfo.indexOf(mobileAgents[v]) > 0) {
+			    				            mobile_flag = true;
+			    				            break;
+			    				        }
+			    				    }
+			    				    if(mobile_flag){
+			    				    	location.href = _href;
+			    				    }else{			    				    	
+				    					layer.open({
+		    						      type: 2,
+		    						      title: _title,
+		    						      shadeClose: true,
+		    						      shade: false,
+		    						      maxmin: true, //开启最大化最小化按钮
+		    						      area: ['893px', '600px'],
+		    						      content: _href
+		    						    });
+			    				    }
+			    				});
+			    				break;
+			    			case"delete":
+			    				$(this).click(function(){
+			    					layer.confirm('确认要删除吗？', {
+			    			            btn : [ '确定', '取消' ]//按钮
+			    			        }, function(index) {
+			    			            layer.close(index);
+				    			        var loadIndex = layer.load(2,{shade: [0.7, '#393D49']}, {shadeClose: true}); //0代表加载的风格，支持0-2
+			    			            $.post(_href,function(){			    			            	
+				    			            table.fnDraw();
+				    			            layer.close(loadIndex);
+			    			            });
+			    			        }); 
+			    				});
+			    				break;
+			    			case"edit":
+								$(this).click(function(){
+									table.showModal(aData);
+			    				});
+			    				break;
+				    		}
+				    	});
+			    	 return nRow;
 			     }
 			});
 		}
 	});	
 	$(function(){
 		table = new Table();
-		
+		table.init();
 	});	
 </script>
 

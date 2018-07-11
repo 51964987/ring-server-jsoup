@@ -26,30 +26,22 @@ filter:progid:DXImageTransform.Microsoft.Alpha(opacity=80); -moz-opacity: 0.8; o
 @media (max-width:619px) {
 .icon_Quick { display: none }
 }
+@media (min-width:619px) {
+.title{display: none}
+}
 </style>
 <body>
-
-<header  th:replace="/common/common-header :: onloadHeader('/detail/list')"></header>
-
-<nav class="breadcrumb">
-	<div class="container">
-		<i class="Hui-iconfont">&#xe67f;</i>
-		<a class="c-primary">首页</a>
-		<span class="c-gray">&gt;</span>
-		<a>浏览过的页面</a>
-		<span class="c-gray en">&gt;</span>
-		<a th:text="${detail.title}">图片</a>
-	</div>
-</nav>
-
 <div class="wap-container">
 	<div class="container">
+		<div class="row clearfix cases-list clearfix title">
+			<div class="item col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-10" th:text="${detail.title}">标题</div>
+		</div>
 		<div class="row clearfix cases-list clearfix">
-			<div class="item col-xs-12 col-sm-6 col-md-4 col-lg-3" th:each="m : ${imgs}">
+			<div class="item col-xs-12 col-sm-6 col-md-4 col-lg-3 mt-10" th:each="m,iterStat: ${imgs}">
 				<div class="item-box">
 					<div class="pic-box"><a title="" rel="nofollow" target="_blank" th:href="${m}"><img th:src="${m}"></a></div>
 					<div class="text-box clearfix">
-						<span class="f-l"><a rel="nofollow" target="_blank" th:href="${m}">&nbsp;</a></span>
+						<span class="f-l"><a rel="nofollow" target="_blank" th:href="${m}" th:text="'图-'+(${iterStat.index}+1)">图片说明</a></span>
 					</div>
 				</div>
 			</div>

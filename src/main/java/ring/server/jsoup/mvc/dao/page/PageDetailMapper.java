@@ -10,6 +10,7 @@ import ring.server.jsoup.mvc.model.page.PageDetail;
 @Mapper
 public interface PageDetailMapper {
 	int add(PageDetail pageDetail)throws Exception;
+	int delete(@Param("source")String source,@Param("id")String id)throws Exception;
 	PageDetail findById(@Param("source")String source,@Param("id")String id)throws Exception;
 	List<PageDetail> findList(PageDetail pageDetail)throws Exception;
 }

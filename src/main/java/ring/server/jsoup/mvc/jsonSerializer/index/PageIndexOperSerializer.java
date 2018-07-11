@@ -1,4 +1,4 @@
-package ring.server.jsoup.mvc.jsonSerializer.page;
+package ring.server.jsoup.mvc.jsonSerializer.index;
 
 import java.io.IOException;
 
@@ -10,7 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-import ring.server.jsoup.mvc.model.page.PageList;
+import ring.server.jsoup.mvc.model.page.PageIndex;
 
 /**
  * 通用序列化
@@ -18,7 +18,7 @@ import ring.server.jsoup.mvc.model.page.PageList;
  * @date 2017年12月22日 下午4:08:48
  * @version V1.0
  */
-public class PageListOperSerializer extends JsonSerializer<String>{
+public class PageIndexOperSerializer extends JsonSerializer<String>{
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
@@ -27,9 +27,10 @@ public class PageListOperSerializer extends JsonSerializer<String>{
 			throws IOException, JsonProcessingException {
 		try {
 			//序列对象
-			PageList pageList = (PageList) jg.getCurrentValue();
+			PageIndex pageIndex = (PageIndex) jg.getCurrentValue();
 			StringBuffer sb = new StringBuffer();
-			sb.append("<a style=\"text-decoration:none;font-size: 18px;\" target=\"_blank\" data-type=\"imgs\" data-title=\""+pageList.getTitle()+"\" data-href=\"/detail/imgs/"+pageList.getSource()+"/"+pageList.getId()+"\" title=\"图片\"><i class=\"Hui-iconfont\">&#xe613;</i></a>");
+			sb.append("<a style=\"text-decoration:none;font-size: 18px;\" target=\"_blank\" data-type=\"edit\" title=\"编辑\"><i class=\"Hui-iconfont\">&#xe60c;</i></a>");
+			sb.append("<a style=\"text-decoration:none;font-size: 18px;margin-left:5px\" data-type=\"delete\" target=\"_blank\" data-href=\"index/delete/"+pageIndex.getEnName()+"\" title=\"删除\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a>");
 			jg.writeString(sb.toString());
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
