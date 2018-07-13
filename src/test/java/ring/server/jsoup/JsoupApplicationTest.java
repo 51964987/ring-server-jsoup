@@ -13,6 +13,7 @@ import ring.server.jsoup.common.page.common.CommonDetailPage;
 import ring.server.jsoup.common.page.common.CommonIndex;
 import ring.server.jsoup.common.page.common.CommonListPage;
 import ring.server.jsoup.common.page.common.CommonPagination;
+import ring.server.jsoup.common.rest.RestException;
 import ring.server.jsoup.mvc.dao.page.PageListMapper;
 import ring.server.jsoup.mvc.model.page.PageConfig;
 import ring.server.jsoup.mvc.model.page.PageList;
@@ -48,7 +49,11 @@ public class JsoupApplicationTest {
 		pageConfig.setLastPagePattern("page\\=(\\d+)");
 		pageConfig.setIndex("");
 		
-    	pageConfigServiceImpl.add(pageConfig);
+    	try {
+			pageConfigServiceImpl.add(pageConfig);
+		} catch (RestException e) {
+			e.printStackTrace();
+		}
 		
 //		PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
 //		System.out.println(pageConfig.getCnName());
@@ -57,7 +62,7 @@ public class JsoupApplicationTest {
 	@Test
 	public void detailPageTest(){
 		
-		String url = "https://cl.wy8.info/htm_data/7/1804/3123306.html";
+		String url = "https://cl.wy8.info/htm_data/16/1807/3193734.html";
 		try {
 			PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
 			new CommonDetailPage(url,pageConfig,pageDetailServiceImpl).call();

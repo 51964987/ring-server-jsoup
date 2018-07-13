@@ -21,6 +21,7 @@ import com.github.pagehelper.PageInfo;
 
 import ring.server.jsoup.common.page.common.CommonListPage;
 import ring.server.jsoup.common.page.common.CommonPagination;
+import ring.server.jsoup.common.rest.RestException;
 import ring.server.jsoup.mvc.dao.page.PageListMapper;
 import ring.server.jsoup.mvc.model.page.PageConfig;
 import ring.server.jsoup.mvc.model.page.PageDetail;
@@ -49,16 +50,12 @@ public class PageController {
 	PageListMapper pageListMapper;
 
 	@RequestMapping("counts")
-	public ResponseEntity<Object> counts(){
-		try {
-			return new ResponseEntity<>(pageListServiceImpl.findListCounts(),HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<Object> counts()throws RestException{
+		return new ResponseEntity<>(pageListServiceImpl.findListCounts(),HttpStatus.OK);
 	}
 
 	@RequestMapping(value="detail/{source}/{id}",method=RequestMethod.GET)
-	public ModelAndView detail(@PathVariable("source") String source,@PathVariable("id") String id) throws Exception{
+	public ModelAndView detail(@PathVariable("source") String source,@PathVariable("id") String id) throws RestException{
 		ModelAndView model = new ModelAndView("page/page-detail");
 		
 		PageDetail pageDetail = pageListServiceImpl.findDetail(source, id);
@@ -92,7 +89,7 @@ public class PageController {
 			@RequestParam(required=false)String modelUrl,
 			@RequestParam(required=false)String source,
 			PageList pageList
-			) throws Exception{
+			) throws RestException{
 		
 		if(StringUtils.isEmpty(source)){
 			return new ResponseEntity<>("数据来源为空", HttpStatus.BAD_REQUEST);
@@ -127,20 +124,16 @@ public class PageController {
 	public ResponseEntity<Object> exec(
 			@RequestParam(required=false)String server,
 			@RequestParam(required=false)String modelUrl,
-			@RequestParam(required=false)String source){
-		try {
-			PageConfig pageConfig = pageConfigServiceImpl.get(source);
-			String url = null;
-			List<PageUrl> pageUrls = pageUrlServiceImpl.findByConfigId(pageConfig.getId());
-			if(pageUrls!=null&&pageUrls.size()>0){
-				//判断是否有效
-				//...
-				url = pageUrls.get(0).getUrl();
-			}
-			new CommonPagination(url+modelUrl,pageConfig,pageListMapper).call();
-		} catch (Exception e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			@RequestParam(required=false)String source)throws RestException{
+		PageConfig pageConfig = pageConfigServiceImpl.get(source);
+		String url = null;
+		List<PageUrl> pageUrls = pageUrlServiceImpl.findByConfigId(pageConfig.getId());
+		if(pageUrls!=null&&pageUrls.size()>0){
+			//判断是否有效
+			//...
+			url = pageUrls.get(0).getUrl();
 		}
+		new CommonPagination(url+modelUrl,pageConfig,pageListMapper).call();
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

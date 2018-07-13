@@ -48,91 +48,10 @@
 
 <footer th:replace="/common/common-footer :: onloadFooter"></footer>
 
-<!--普通弹出层-->
-<div class="modal fade middle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content radius">
-			<div class="modal-header">
-				<!-- <h3 class="modal-title">对话框标题</h3> -->
-				<nav>
-					<div class="container">
-						<i class="Hui-iconfont">&#xe67f;</i>
-						<a class="c-primary">首页</a>
-						<span class="c-gray">&gt;</span>
-						<a>数据源管理</a>
-						<span class="c-gray en">&gt;</span>
-						<a id="opertext">添加</a>
-					</div>
-				</nav>
-				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
-			</div>
-			<form action="index/save" method="post" class="form form-horizontal responsive" id="demoform">
-			<input type="hidden" name="oper" id="oper" />
-			<div class="modal-body">
-					<div class="row cl">
-						<label class="form-label col-xs-3">源系统标识：</label>
-						<div class="formControls col-xs-8">
-							<input type="text" class="input-text" placeholder="4~16个字符，字母" name="enName" autocomplete="off">
-						</div>
-					</div>
-					<div class="row cl">
-						<label class="form-label col-xs-3">源系统名称：</label>
-						<div class="formControls col-xs-8">
-							<input type="text" class="input-text" placeholder="4~16个字符，字母/中文/数字/下划线" name="cnName" autocomplete="off">
-						</div>
-					</div>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-primary" type="submit">保存</button>
-				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-			</div>
-			</form>
-		</div>
-	</div>
-</div>
-
 <div th:replace="/common/common-js :: onloadJS"></div>
 <div th:replace="/common/common-dataTables :: onloadDataTables('#form_page','.table-sort','/index/list')"></div>
 <script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/jquery.validate.min.js}"></script>
 <script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/validate-methods.js}"></script>
 <script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/messages_zh.min.js}"></script>
-<script type="text/javascript">
-	$(function(){
-		$.extend(Table.prototype,{
-			showModalCallback: function(aData){
-				alert("ddd");
-			}
-		});
-		$("#addBtn").click(function(){table.showModal();});
-		$("#demoform").validate({
-			rules:{
-				enName:{
-					required:true,
-					minlength:4,
-					maxlength:16
-				},
-				cnName:{
-					required:true,
-					minlength:4,
-					maxlength:16
-				}
-			},
-			onkeyup:false,
-			focusCleanup:true,
-			success:"valid",
-			submitHandler:function(form){
-				$(form).ajaxSubmit({
-					success:function(data){
-						$(".modal").modal("hide");
-						table.fnDraw(false);
-					},
-					error:function(xhr, textStatus, error){
-						alert(xhr.responseText);
-					}
-				});
-			}
-		});
-	});
-</script>
 </body>
 </html>

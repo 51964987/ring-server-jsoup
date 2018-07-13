@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="ring.server.jsoup.mvc.dao.page.PageUrlMapper">
 	
+	<!-- 增加 -->
+	<insert id="add" parameterType="java.util.List">
+		INSERT INTO page_url (enName,url)
+		VALUES
+		<foreach collection="list" item="data" separator="," index="index">		
+		(#{data.enName},#{data.url})
+		</foreach>
+	</insert>
 	
 	<select id="findByConfigId" resultMap="pageUrlMap">
 		SELECT t.* FROM page_url t

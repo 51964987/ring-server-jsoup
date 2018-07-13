@@ -18,32 +18,39 @@
 	function Table(){};
 	$.extend(Table.prototype,{
 		init:function(){
-			
+			$("#addBtn").click(function(){table.showOperPage("添加","add");});
 		},
-		showModal:function(aData){
-			$("body").find(".modal form")[0].reset();
-			if(aData == null || aData == "undefined"){
-				$("#oper").val("add");
-				$("#opertext").text("添加");
-			}else{
-				$("body").find(".modal form input").each(function(){
-					var name = $(this).attr("name");
-					$(this).val(aData[name]);				
-				});
-				$("#oper").val("edit");
-				$("#opertext").text("编辑");			
-			}
-			table.showModalCallback(aData);
-			$(".modal").modal("show");
+		showOperPage:function(_title,_url){
+			layer.open({
+		      type: 2,
+		      title: _title,
+		      shadeClose: true,
+		      shade: false,
+		      maxmin: true, //开启最大化最小化按钮
+		      area: ['800px', '75%'],
+		      btn: ['保存', '关闭'],
+		      yes: function (index,layero) {
+		    	  var iframeWin = window[layero.find('iframe')[0]['name']];
+		    	  iframeWin.$("#form_oper").attr("index",index).submit();
+		      },
+		      content: _url
+		    });
 		},
-		showModalCallback: function(aData){
-			
+		showImgPage:function(_title,_url){
+			layer.open({
+		      type: 2,
+		      title: _title,
+		      shadeClose: true,
+		      shade: false,
+		      maxmin: true, //开启最大化最小化按钮
+		      area: ['800px', '75%'],
+		      content: _url
+		    });
 		},
-		hideModal:function(){
-			$(".modal").modal("hide");
-		},
-		fnDraw:function(initFlag){
-			if(initFlag){
+		drawFlag:false,
+		fnDraw:function(){
+			if(this.drawFlag==false){
+				this.drawFlag=true;
 				this.bindEvents();
 			}else{				
 				$([[${table}]]).dataTable().fnDraw(false);
@@ -90,13 +97,7 @@
 						"success":fnCallback,
 						"error": function( xhr, textStatus, error ) {
 							$(".dataTables_processing").hide();
-						    if(textStatus === 'timeout' ){  
-						        alert( 'The server took too long to send the data.' );
-						    }else{
-						        //alert( 'An error occurred on the server. Please try again in a minute.' );  
-						        alert(xhr.responseText);  
-						    }
-						   // $([[${table}]]).dataTable().fnProcessingIndicator( );  
+						    page.handleAjaxError(xhr, textStatus, error);
 						}  
 					});
 			     },
@@ -130,15 +131,7 @@
 			    				    if(mobile_flag){
 			    				    	location.href = _href;
 			    				    }else{			    				    	
-				    					layer.open({
-		    						      type: 2,
-		    						      title: _title,
-		    						      shadeClose: true,
-		    						      shade: false,
-		    						      maxmin: true, //开启最大化最小化按钮
-		    						      area: ['893px', '600px'],
-		    						      content: _href
-		    						    });
+				    					table.showImgPage(_title,_href);
 			    				    }
 			    				});
 			    				break;
@@ -158,7 +151,7 @@
 			    				break;
 			    			case"edit":
 								$(this).click(function(){
-									table.showModal(aData);
+									table.showOperPage(_title,_href);
 			    				});
 			    				break;
 				    		}

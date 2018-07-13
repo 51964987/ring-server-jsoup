@@ -19,7 +19,7 @@ public class RenameTest {
 //        file1.renameTo(new File("f:/B"));  
 		
 		List<File> list = new ArrayList<>();
-		children(new File("C:\\Users\\ring\\Downloads\\H-ui"), list);
+		children(new File("C:\\Users\\ring\\Downloads\\ring-server-jsoup-master"), list);
 		System.out.println(list.size());
 		
 	}

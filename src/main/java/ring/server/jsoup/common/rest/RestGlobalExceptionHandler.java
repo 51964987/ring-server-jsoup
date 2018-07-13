@@ -12,12 +12,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(RestException.class)
     @ResponseBody
-    ResponseEntity<?> handleControllerException(HttpServletRequest request, Throwable ex) {
+    ResponseEntity<?> handleControllerException(HttpServletRequest request, RestException ex) {
         HttpStatus status = getStatus(request);
         System.err.println(ex.getMessage());
-        return new ResponseEntity<String>(ex.getMessage(), status);
+        return new ResponseEntity<String>(ex.getResultCode().getMsg(), status);
     }
 
     private HttpStatus getStatus(HttpServletRequest request) {

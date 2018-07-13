@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import ring.server.jsoup.common.page.IDetailPage;
+import ring.server.jsoup.common.rest.RestException;
 import ring.server.jsoup.common.util.DownloadUtil;
 import ring.server.jsoup.common.util.HttpUrlUtil;
 import ring.server.jsoup.mvc.model.page.PageConfig;
@@ -59,7 +60,7 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 	}
 
 	@Override
-	public PageDetail call() throws Exception {
+	public PageDetail call() throws RestException {
 		
 		PageDetail pageDetail = new PageDetail();
 		pageDetail.setFid(fid);
@@ -135,10 +136,23 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 			String outputpath = rootFile+targetFold+(StringUtils.isEmpty(pageDetail.getSort())?"":"\\"+pageDetail.getSort()+"\\")+"\\";//+title+"\\";
 			
 			//3.图片下载
-			Elements imgs = doc.getElementsByAttribute(pageConfig.getImageGet());
 			DownloadUtil jsoupUtil = new DownloadUtil();
-			String images = jsoupUtil.imagesText(imgs, pageConfig.getImageAttr(), outputpath,pageConfig.isDownload() );
-			pageDetail.setImages(images);
+			String[] gets = pageConfig.getImageGet().split(",");
+			StringBuffer imagesSb = new StringBuffer();
+			for(String get : gets){				
+				Elements imgs = doc.getElementsByTag(get);
+				String[] attrs = pageConfig.getImageAttr().split(",");
+				for(String attr : attrs){						
+					String images = jsoupUtil.imagesText(imgs,attr, outputpath,pageConfig.isDownload() );
+					if(images!=null&&images.length()>0){						
+						if(imagesSb.length()>0){
+							imagesSb.append("\t\n");
+						}
+						imagesSb.append(images);
+					}
+				}
+			}
+			pageDetail.setImages(imagesSb.toString());
 			
 			//4.磁力链接下载
 			Elements as = doc.getElementsByTag(pageConfig.getMagnetGet());

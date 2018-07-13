@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ring.server.jsoup.common.rest.RestException;
 import ring.server.jsoup.mvc.service.page.impl.PageModelServiceImpl;
 
 @RestController
@@ -16,7 +17,7 @@ public class PageModelController {
 	PageModelServiceImpl pageModelServiceImpl;
 
 	@RequestMapping("change")
-	public ResponseEntity<Object> counts(String source){
+	public ResponseEntity<Object> counts(String source)throws RestException{
 		try {
 			return new ResponseEntity<>(pageModelServiceImpl.findBySource(source),HttpStatus.OK);
 		} catch (Exception e) {

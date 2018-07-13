@@ -116,10 +116,12 @@ public class DownloadUtil {
 		if(imgs != null && imgs.size()>0){			
 			for(int i=0;i<imgs.size();i++){
 				String src = imgs.get(i).absUrl(attrSrc);
-				if(imagesSb.length()>0){
-					imagesSb.append("\t\n");
+				if(src!=null&&src.length()>0){					
+					if(imagesSb.length()>0){
+						imagesSb.append("\t\n");
+					}
+					imagesSb.append(src);
 				}
-				imagesSb.append(src);
 			}
 			
 			if(isDownload&&imagesSb.toString().length()>0){				

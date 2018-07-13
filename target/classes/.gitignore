@@ -1,5 +1,7 @@
-/static/
-/templates/
+/logback.xml
 /mapper/
+/mybatis-config.xml
+/static/
 /ring/
+/templates/
 /META-INF/

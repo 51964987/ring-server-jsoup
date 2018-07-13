@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/common-head :: onloadHead('数据源管理')"></head>
+<link rel="stylesheet" type="text/css" th:href="@{/ring-ui/css/ring-ui.css}" />
+<body>
+<div class="wap-container">
+	<div class="container">
+		<div class="row clearfix cases-list clearfix mb-10">
+			<form action="add" method="post" class="form form-horizontal responsive" id="form_oper">
+			<input type="hidden" name="oper" id="oper" />
+			<div class="modal-body">
+					<div class="row cl">
+						<label class="form-label col-xs-3">源系统标识：</label>
+						<div class="formControls col-xs-8">
+							<input type="text" class="input-text" placeholder="4~16个字符，字母" name="enName" autocomplete="off">
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-3">源系统名称：</label>
+						<div class="formControls col-xs-8">
+							<input type="text" class="input-text" placeholder="4~16个字符，字母/中文/数字/下划线" name="cnName" autocomplete="off">
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-3">数据源URL：</label>
+						<div class="formControls col-xs-8">
+							<input type="text" class="input-text" placeholder="数据源URL" name="domain" autocomplete="off">
+						</div>
+						<div class="col-xs-1" style="padding-left: 0px">
+							<a id="addUrlBtn" href="javascript:;" style="text-decoration: none;font-size: 18px"><i class="Hui-iconfont">&#xe604;</i></a>
+						</div>
+					</div>
+			</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div th:replace="/common/common-js :: onloadJS"></div>
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/jquery.validate.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/validate-methods.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/messages_zh.min.js}"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#addUrlBtn").click(function(){
+			//alert("f");
+			$("<div class=\"row cl addUrl\">")
+			.append($("<div class=\"formControls col-offset-3 col-xs-8\">")
+					.append($("<input type=\"text\" class=\"input-text\" placeholder=\"数据源URL\" name=\"domain\" autocomplete=\"off\">")))
+			.append($("<div class=\"col-xs-1\" style=\"padding-left: 0px\">").append($("<a href=\"javascript:;\" style=\"text-decoration: none;font-size: 18px\"><i class=\"Hui-iconfont\">&#xe60b;</i></a>")
+					.click(function(){
+						$(this).parent().parent().remove();
+					})))
+			.appendTo($(this).parents(".modal-body"));
+			
+		});
+		$("#form_oper").validate({
+			rules:{
+				enName:{
+					required:true,
+					minlength:4,
+					maxlength:16
+				},
+				cnName:{
+					required:true,
+					minlength:4,
+					maxlength:16
+				}
+			},
+			onkeyup:false,
+			focusCleanup:true,
+			success:"valid",
+			submitHandler:function(form){
+				$(form).ajaxSubmit({
+					success:function(data){
+						parent.table.fnDraw();
+						parent.layer.close($("#form_oper").attr("index"));
+					},
+					error:function(xhr, textStatus, error){
+						page.handleAjaxError(xhr, textStatus, error);
+					}
+				});
+			}
+		});
+});
+</script>
+</body>
+</html>

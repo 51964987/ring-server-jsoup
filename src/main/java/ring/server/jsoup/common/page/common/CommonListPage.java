@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import ring.server.jsoup.common.page.IListPage;
+import ring.server.jsoup.common.rest.RestException;
 import ring.server.jsoup.common.util.HttpUrlUtil;
 import ring.server.jsoup.mvc.model.page.PageConfig;
 import ring.server.jsoup.mvc.model.page.PageList;
@@ -38,7 +39,7 @@ public class CommonListPage implements Callable<Object>,IListPage{
 	}
 
 	@Override
-	public Object call() throws Exception{
+	public Object call() throws RestException{
 
 		//Document doc = Jsoup.connect(url).get();
 		Document doc = HttpUrlUtil.get(url);

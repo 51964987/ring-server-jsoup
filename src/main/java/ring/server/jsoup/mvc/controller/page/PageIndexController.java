@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import ring.server.jsoup.common.rest.RestException;
 import ring.server.jsoup.mvc.model.page.PageIndex;
 import ring.server.jsoup.mvc.service.page.impl.PageIndexServiceImpl;
 import ring.server.jsoup.mvc.utils.DataTableResultHelper;
@@ -27,7 +28,7 @@ public class PageIndexController {
 	PageIndexServiceImpl pageIndexServiceImpl;
 
 	@RequestMapping("change")
-	public ResponseEntity<Object> counts(String source){
+	public ResponseEntity<Object> counts(String source)throws RestException{
 		try {
 			return new ResponseEntity<>(pageIndexServiceImpl.findAll(),HttpStatus.OK);
 		} catch (Exception e) {
@@ -35,7 +36,6 @@ public class PageIndexController {
 		}
 	}
 	
-
 	@ResponseBody
 	@RequestMapping(value="list",method=RequestMethod.POST)
 	public Object findList(
@@ -43,7 +43,7 @@ public class PageIndexController {
 			@RequestParam(required=false)Integer iDisplayStart,
 			@RequestParam(required=false)Integer iDisplayLength,
 			PageIndex pageIndex
-			) throws Exception{
+			)throws RestException{
 		
 		Map<String, Object> map = null;
 		PageHelper.offsetPage(iDisplayStart, iDisplayLength, true);

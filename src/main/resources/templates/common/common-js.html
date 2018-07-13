@@ -72,8 +72,9 @@
 		        alert( 'The server took too long to send the data.' );  
 		    }else {  
 		        alert( 'An error occurred on the server. Please try again in a minute.' );  
-		    }		  
-		    $('.dataTable').dataTable().fnProcessingIndicator( false );  
+		    }	
+			layer.alert(xhr.responseText); 
+		    //$('.dataTable').dataTable().fnProcessingIndicator( false );  
 		},
 		openEchartLoadingEvent:function(data){
 			$("[data-dom='echarts']").each(function(){

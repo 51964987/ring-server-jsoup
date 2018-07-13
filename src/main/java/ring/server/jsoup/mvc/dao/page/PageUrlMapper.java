@@ -8,5 +8,6 @@ import ring.server.jsoup.mvc.model.page.PageUrl;
 
 @Mapper
 public interface PageUrlMapper {
+	int add(List<PageUrl> list)throws Exception;
 	List<PageUrl> findByConfigId(String enName)throws Exception;
 }
