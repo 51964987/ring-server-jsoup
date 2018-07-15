@@ -3,6 +3,11 @@
 <mapper namespace="ring.server.jsoup.mvc.dao.page.PageUrlMapper">
 	
 	<!-- 增加 -->
+	<delete id="deleteByEnName">
+	 	DELETE FROM page_url WHERE enName=#{enName};
+	</delete>
+	
+	<!-- 增加 -->
 	<insert id="add" parameterType="java.util.List">
 		INSERT INTO page_url (enName,url)
 		VALUES
@@ -11,9 +16,9 @@
 		</foreach>
 	</insert>
 	
-	<select id="findByConfigId" resultMap="pageUrlMap">
+	<select id="findByEnName" resultMap="pageUrlMap">
 		SELECT t.* FROM page_url t
-		WHERE t.enName = #{configId}
+		WHERE t.enName = #{enName}
 	</select>
 	
 	<resultMap type="ring.server.jsoup.mvc.model.page.PageUrl" id="pageUrlMap">

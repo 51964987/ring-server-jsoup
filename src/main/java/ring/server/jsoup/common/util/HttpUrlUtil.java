@@ -22,20 +22,15 @@ public class HttpUrlUtil {
 				logger.info("请次"+readNum+"请求-->"+url);
 				doc = Jsoup.connect(url).get();
 				timeout = false;
-				if(readNum==10){
-					break;
-				}
 			} catch (Exception e) {
 				logger.error(e.getMessage(),e);
 				timeout = true;
+				if(readNum==10){
+					throw new RestException(RestCode.TIMEOUT_ERROR,e);
+				}
 				readNum++;
 			}
 		}while(timeout);
-		
-		if(timeout){
-			throw new RestException(RestCode.TIMEOUT_ERROR,url);
-		}
-		
 		return doc;
 	}
 }

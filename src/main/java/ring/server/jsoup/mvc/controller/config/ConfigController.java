@@ -3,10 +3,13 @@ package ring.server.jsoup.mvc.controller.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.executor.ResultExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,52 +36,25 @@ public class ConfigController {
 		return new ModelAndView("config/index");
 	}
 	
-	@RequestMapping(value="add",method=RequestMethod.GET)
-	public ModelAndView add(){
-		return new ModelAndView("config/index-oper");
+	@RequestMapping(value="edit/{enName}",method=RequestMethod.GET)
+	public ModelAndView edit(@PathVariable("enName")String enName) throws RestException{
+		ModelAndView model = new ModelAndView("config/index-oper");
+		PageIndex pageIndex = pageIndexServiceImpl.findByEnName(enName);
+		model.addObject("DATA", pageIndex);
+		if(!StringUtils.isEmpty(pageIndex.getDomain())){			
+			model.addObject("domains", pageIndex.getDomain().split(","));
+		}
+		model.addObject("url", "/config/edit");
+		return model;
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="add",method=RequestMethod.POST)
-	public Object add(PageIndex pageIndex,String[] domain)throws RestException{
-		try {
-			pageIndexServiceImpl.save(pageIndex);
-			if(domain!=null&&domain.length>0){
-				
-				List<PageUrl> list = new ArrayList<>();
-				PageUrl pageUrl = null;
-				for(String url : domain){
-					pageUrl = new PageUrl();
-					pageUrl.setEnName(pageIndex.getEnName());
-					pageUrl.setUrl(url);
-					list.add(pageUrl);
-				}
-				
-				pageUrlServiceImpl.add(list);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return new ResponseEntity<>(true, HttpStatus.OK);
-	}
-
-	@ResponseBody
-	@RequestMapping(value="index/delete/{id}",method=RequestMethod.POST)
-	public Object delete(@PathVariable("id") String id) throws RestException{
-		return new ResponseEntity<>(pageIndexServiceImpl.delete(id), HttpStatus.OK);
-	}
-	
-	@ResponseBody
-	@RequestMapping(value="index/save",method=RequestMethod.POST)
-	public Object save(PageIndex pageIndex,String[] domain,String oper) throws RestException{
-		int result = 0;
-		if("add".equals(oper)){			
-			result = pageIndexServiceImpl.save(pageIndex);
-		}else if("edit".equals(oper)){
-			result = pageIndexServiceImpl.edit(pageIndex);
-		}
+	@Transactional(rollbackFor=RestException.class)
+	@RequestMapping(value="edit",method=RequestMethod.POST)
+	public Object edit(PageIndex pageIndex,String[] domain)throws RestException{
+		pageIndexServiceImpl.edit(pageIndex);
 		if(domain!=null&&domain.length>0){
-			
+			pageUrlServiceImpl.deleteByEnName(pageIndex.getEnName());
 			List<PageUrl> list = new ArrayList<>();
 			PageUrl pageUrl = null;
 			for(String url : domain){
@@ -87,12 +63,43 @@ public class ConfigController {
 				pageUrl.setUrl(url);
 				list.add(pageUrl);
 			}
-			
 			pageUrlServiceImpl.add(list);
 		}
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value="add",method=RequestMethod.GET)
+	public ModelAndView add(){
+		ModelAndView model = new ModelAndView("config/index-oper");
+		model.addObject("url", "/config/add");
+		return model;
+	}
+
+	@Transactional(rollbackFor=RestException.class)
+	@ResponseBody
+	@RequestMapping(value="add",method=RequestMethod.POST)
+	public Object add(PageIndex pageIndex,String[] domain)throws RestException{
+		pageIndexServiceImpl.save(pageIndex);
+		if(domain!=null&&domain.length>0){
+			List<PageUrl> list = new ArrayList<>();
+			PageUrl pageUrl = null;
+			for(String url : domain){
+				pageUrl = new PageUrl();
+				pageUrl.setEnName(pageIndex.getEnName());
+				pageUrl.setUrl(url);
+				list.add(pageUrl);
+			}
+			pageUrlServiceImpl.add(list);
+		}
+		return new ResponseEntity<>(true, HttpStatus.OK);
+	}
+
+	@ResponseBody
+	@RequestMapping(value="delete/{id}",method=RequestMethod.POST)
+	public Object delete(@PathVariable("id") String id) throws RestException{
+		return new ResponseEntity<>(pageIndexServiceImpl.delete(id), HttpStatus.OK);
+	}
+		
 	@RequestMapping("list")
 	public ModelAndView list(){
 		return new ModelAndView("config/list");

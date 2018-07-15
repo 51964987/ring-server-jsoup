@@ -15,9 +15,8 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RestException.class)
     @ResponseBody
     ResponseEntity<?> handleControllerException(HttpServletRequest request, RestException ex) {
-        HttpStatus status = getStatus(request);
-        System.err.println(ex.getMessage());
-        return new ResponseEntity<String>(ex.getResultCode().getMsg(), status);
+    	HttpStatus status = getStatus(request);
+    	return new ResponseEntity<String>(ex.getMessage(), status);
     }
 
     private HttpStatus getStatus(HttpServletRequest request) {

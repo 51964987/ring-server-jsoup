@@ -26,7 +26,7 @@ public class PageConfigServiceImpl implements PageConfigService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage(),e);
-			throw new RestException(RestCode.DATATABLE_ERROR);
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
 		}
 	}
 
@@ -37,7 +37,7 @@ public class PageConfigServiceImpl implements PageConfigService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage(),e);
-			throw new RestException(RestCode.DATATABLE_ERROR);
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
 		}
 	}
 

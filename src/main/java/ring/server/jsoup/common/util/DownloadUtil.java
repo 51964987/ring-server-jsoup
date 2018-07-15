@@ -116,7 +116,7 @@ public class DownloadUtil {
 		if(imgs != null && imgs.size()>0){			
 			for(int i=0;i<imgs.size();i++){
 				String src = imgs.get(i).absUrl(attrSrc);
-				if(src!=null&&src.length()>0){					
+				if(src!=null&&src.length()>0){//是否应该判断图片的类型					
 					if(imagesSb.length()>0){
 						imagesSb.append("\t\n");
 					}

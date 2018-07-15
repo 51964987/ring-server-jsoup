@@ -6,6 +6,7 @@
 <script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}"></script>
 <script type="text/javascript" th:src="@{/lib/jquery-ui/1.9.1/jquery-ui.min.js}"></script>
 <script type="text/javascript" th:src="@{/h-ui/js/H-ui.js}"></script>
+<script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}"></script>
 <script type="text/javascript">
 	Date.prototype.Format = function (fmt) {  
 	    var o = {  
@@ -69,12 +70,11 @@
 		},
 		handleAjaxError:function( xhr, textStatus, error){
 			if ( textStatus === 'timeout' ) {  
-		        alert( 'The server took too long to send the data.' );  
+				layer.alert( 'The server took too long to send the data.' );  
 		    }else {  
-		        alert( 'An error occurred on the server. Please try again in a minute.' );  
+		        //alert( 'An error occurred on the server. Please try again in a minute.' );
+		        layer.alert(xhr.responseText); 
 		    }	
-			layer.alert(xhr.responseText); 
-		    //$('.dataTable').dataTable().fnProcessingIndicator( false );  
 		},
 		openEchartLoadingEvent:function(data){
 			$("[data-dom='echarts']").each(function(){

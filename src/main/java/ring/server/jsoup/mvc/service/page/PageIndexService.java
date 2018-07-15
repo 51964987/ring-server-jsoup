@@ -6,7 +6,8 @@ import ring.server.jsoup.common.rest.RestException;
 import ring.server.jsoup.mvc.model.page.PageIndex;
 
 public interface PageIndexService {
-	int delete(String id)throws RestException;
+	PageIndex findByEnName(String enName)throws RestException;
+	int delete(String enName)throws RestException;
 	int edit(PageIndex pageIndex)throws RestException;
 	int save(PageIndex pageIndex)throws RestException;
 	List<PageIndex> findAll()throws RestException;

@@ -19,13 +19,13 @@ public class PageUrlServiceImpl implements PageUrlService {
 	private PageUrlMapper pageUrlMapper;
 	
 	@Override
-	public List<PageUrl> findByConfigId(String configIp) throws RestException {
+	public List<PageUrl> findByEnName(String enName) throws RestException {
 		try {
-			return pageUrlMapper.findByConfigId(configIp);
+			return pageUrlMapper.findByEnName(enName);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			e.printStackTrace();
-			throw new RestException(RestCode.DATATABLE_ERROR);
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
 		}
 	}
 
@@ -36,7 +36,18 @@ public class PageUrlServiceImpl implements PageUrlService {
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			e.printStackTrace();
-			throw new RestException(RestCode.DATATABLE_ERROR);
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
+		}
+	}
+
+	@Override
+	public int deleteByEnName(String enName) throws RestException {
+		try {
+			return pageUrlMapper.deleteByEnName(enName);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			e.printStackTrace();
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
 		}
 	}
 

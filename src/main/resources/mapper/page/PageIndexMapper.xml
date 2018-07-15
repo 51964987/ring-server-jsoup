@@ -2,8 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="ring.server.jsoup.mvc.dao.page.PageIndexMapper">
 	
+	<select id="findByEnName" resultMap="pageIndexMap">
+		SELECT t.enName,cnName,f.url AS domain
+		FROM page_index t
+		LEFT JOIN (SELECT tt.enName,GROUP_CONCAT(tt.url) AS url FROM page_url tt GROUP BY tt.enName) f ON t.enName = f.enName
+		WHERE t.enName=#{enName}
+	</select>
+	
 	<delete id="delete">  
-        DELETE FROM page_index WHERE enName=#{id}
+        DELETE FROM page_index WHERE enName=#{enName};
+        DELETE FROM page_url WHERE enName=#{enName};
 	</delete> 
 		
 	<update id="edit">  

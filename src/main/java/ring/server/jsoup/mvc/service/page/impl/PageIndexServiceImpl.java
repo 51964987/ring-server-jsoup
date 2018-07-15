@@ -17,14 +17,26 @@ public class PageIndexServiceImpl implements PageIndexService {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private PageIndexMapper pageIndexMapper;
+	
 	@Override
-	public int delete(String id) throws RestException {
+	public PageIndex findByEnName(String enName) throws RestException {
 		try {
-			return pageIndexMapper.delete(id);
+			return pageIndexMapper.findByEnName(enName);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			e.printStackTrace();
-			throw new RestException(RestCode.DATATABLE_ERROR);
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
+		}
+	}
+	
+	@Override
+	public int delete(String enName) throws RestException {
+		try {
+			return pageIndexMapper.delete(enName);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			e.printStackTrace();
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
 		}
 	}
 	@Override
@@ -34,7 +46,7 @@ public class PageIndexServiceImpl implements PageIndexService {
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			e.printStackTrace();
-			throw new RestException(RestCode.DATATABLE_ERROR);
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
 		}
 	}
 	@Override
@@ -44,7 +56,7 @@ public class PageIndexServiceImpl implements PageIndexService {
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			e.printStackTrace();
-			throw new RestException(RestCode.DATATABLE_ERROR);
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
 		}
 	}
 	@Override
@@ -54,7 +66,7 @@ public class PageIndexServiceImpl implements PageIndexService {
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			e.printStackTrace();
-			throw new RestException(RestCode.DATATABLE_ERROR);
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
 		}
 	}
 	@Override
@@ -64,7 +76,7 @@ public class PageIndexServiceImpl implements PageIndexService {
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			e.printStackTrace();
-			throw new RestException(RestCode.DATATABLE_ERROR);
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
 		}
 	}
 

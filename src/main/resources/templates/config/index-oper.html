@@ -6,28 +6,27 @@
 <div class="wap-container">
 	<div class="container">
 		<div class="row clearfix cases-list clearfix mb-10">
-			<form action="add" method="post" class="form form-horizontal responsive" id="form_oper">
+			<form th:action="${url}" method="post" class="form form-horizontal responsive" id="form_oper">
 			<input type="hidden" name="oper" id="oper" />
 			<div class="modal-body">
 					<div class="row cl">
 						<label class="form-label col-xs-3">源系统标识：</label>
 						<div class="formControls col-xs-8">
-							<input type="text" class="input-text" placeholder="4~16个字符，字母" name="enName" autocomplete="off">
+							<input type="text" class="input-text" placeholder="4~16个字符，字母" th:value="${DATA} != null?${DATA.enName}:''" name="enName" autocomplete="off">
 						</div>
 					</div>
 					<div class="row cl">
 						<label class="form-label col-xs-3">源系统名称：</label>
 						<div class="formControls col-xs-8">
-							<input type="text" class="input-text" placeholder="4~16个字符，字母/中文/数字/下划线" name="cnName" autocomplete="off">
+							<input type="text" class="input-text" placeholder="4~16个字符，字母/中文/数字/下划线"  th:value="${DATA} != null?${DATA.cnName}:''" name="cnName" autocomplete="off">
 						</div>
 					</div>
 					<div class="row cl">
 						<label class="form-label col-xs-3">数据源URL：</label>
-						<div class="formControls col-xs-8">
-							<input type="text" class="input-text" placeholder="数据源URL" name="domain" autocomplete="off">
-						</div>
-						<div class="col-xs-1" style="padding-left: 0px">
-							<a id="addUrlBtn" href="javascript:;" style="text-decoration: none;font-size: 18px"><i class="Hui-iconfont">&#xe604;</i></a>
+						<div class="formControls col-xs-8" style="position: relative;">
+							<input type="text" class="input-text mb-5" placeholder="数据源URL" th:if="${#lists.isEmpty(domains)}" name="domain" autocomplete="off">
+							<input type="text" class="input-text mb-5" placeholder="数据源URL" th:each="m,iterStat:${domains}" th:value="${m}"  name="domain" autocomplete="off">
+							<!-- <div  style="position: absolute;top: 0px;right: -5px;"><a href="javascript:;" style="text-decoration: none;font-size: 18px"><i class="Hui-iconfont">&#xe604;</i></a></div> -->
 						</div>
 					</div>
 			</div>
@@ -42,17 +41,19 @@
 <script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/messages_zh.min.js}"></script>
 <script type="text/javascript">
 	$(function(){
-		$("#addUrlBtn").click(function(){
-			//alert("f");
-			$("<div class=\"row cl addUrl\">")
-			.append($("<div class=\"formControls col-offset-3 col-xs-8\">")
-					.append($("<input type=\"text\" class=\"input-text\" placeholder=\"数据源URL\" name=\"domain\" autocomplete=\"off\">")))
-			.append($("<div class=\"col-xs-1\" style=\"padding-left: 0px\">").append($("<a href=\"javascript:;\" style=\"text-decoration: none;font-size: 18px\"><i class=\"Hui-iconfont\">&#xe60b;</i></a>")
-					.click(function(){
-						$(this).parent().parent().remove();
-					})))
-			.appendTo($(this).parents(".modal-body"));
-			
+		$("input[name=domain]").bind("focus",function(){
+			$(this).bind("keydown",function(e){
+				if(e.which == 13&&$("input[name=domain]:last").val().length>0){//回车键
+					$(this).clone(true).insertAfter(this);
+					$("input[name=domain]:last").val("").focus();
+				}
+				if(e.which == 8&&$("input[name=domain]").length>1&&$(this).val().length==0){//删除键
+					$(this).remove();
+					var last = $("input[name=domain]:last");
+					var t = last.val();
+					last.val("").focus().val(t);//文本后面聚焦无效。。。。。
+				}
+			});
 		});
 		$("#form_oper").validate({
 			rules:{
@@ -65,6 +66,10 @@
 					required:true,
 					minlength:4,
 					maxlength:16
+				},
+				domain:{
+					required:true,
+					url:true
 				}
 			},
 			onkeyup:false,
@@ -72,6 +77,7 @@
 			success:"valid",
 			submitHandler:function(form){
 				$(form).ajaxSubmit({
+					type: "post",
 					success:function(data){
 						parent.table.fnDraw();
 						parent.layer.close($("#form_oper").attr("index"));

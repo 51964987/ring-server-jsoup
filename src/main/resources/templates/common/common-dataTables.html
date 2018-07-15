@@ -3,7 +3,6 @@
 <body>
 <div th:fragment="onloadDataTables(form,table,url)">
 <script type="text/javascript" th:src="@{/lib/datatables/1.10.15/jquery.dataTables.min.js}"></script>
-<script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}"></script>
 <script type="text/javascript" th:inline="javascript">
 	var table;
 	$([[${form}]]).submit(function (event) {/* .find("[type='submit']") */

@@ -8,7 +8,8 @@ import ring.server.jsoup.mvc.model.page.PageIndex;
 
 @Mapper
 public interface PageIndexMapper {
-	int delete(String id) throws Exception;
+	PageIndex findByEnName(String enName)throws Exception;
+	int delete(String enName) throws Exception;
 	int edit(PageIndex pageIndex) throws Exception;
 	int save(PageIndex pageIndex) throws Exception;
 	List<PageIndex> findAll()throws Exception;

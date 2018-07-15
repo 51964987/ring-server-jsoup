@@ -106,7 +106,7 @@ public class PageController {
 			PageConfig pageConfig = pageConfigServiceImpl.get(source);
 			//目标服务器
 			String url = null;
-			List<PageUrl> pageUrls = pageUrlServiceImpl.findByConfigId(pageConfig.getId());
+			List<PageUrl> pageUrls = pageUrlServiceImpl.findByEnName(pageConfig.getId());
 			if(pageUrls!=null&&pageUrls.size()>0){
 				//判断是否有效
 				//...
@@ -127,7 +127,7 @@ public class PageController {
 			@RequestParam(required=false)String source)throws RestException{
 		PageConfig pageConfig = pageConfigServiceImpl.get(source);
 		String url = null;
-		List<PageUrl> pageUrls = pageUrlServiceImpl.findByConfigId(pageConfig.getId());
+		List<PageUrl> pageUrls = pageUrlServiceImpl.findByEnName(pageConfig.getId());
 		if(pageUrls!=null&&pageUrls.size()>0){
 			//判断是否有效
 			//...

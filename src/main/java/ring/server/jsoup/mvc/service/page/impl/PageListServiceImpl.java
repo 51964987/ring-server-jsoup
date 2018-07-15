@@ -31,7 +31,7 @@ public class PageListServiceImpl implements PageListService{
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			e.printStackTrace();
-			throw new RestException(RestCode.DATATABLE_ERROR);
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
 		}
 	}
 	
@@ -42,7 +42,7 @@ public class PageListServiceImpl implements PageListService{
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			e.printStackTrace();
-			throw new RestException(RestCode.DATATABLE_ERROR);
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
 		}
 	}
 
@@ -53,7 +53,7 @@ public class PageListServiceImpl implements PageListService{
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			e.printStackTrace();
-			throw new RestException(RestCode.DATATABLE_ERROR);
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
 		}
 	}
 
@@ -74,7 +74,7 @@ public class PageListServiceImpl implements PageListService{
 			//...
 			// url = "https://cl.wy8.info/"+pageList.getUrl();
 			String url = null;
-			List<PageUrl> pageUrls = pageUrlServiceImpl.findByConfigId(pageConfig.getEnName());
+			List<PageUrl> pageUrls = pageUrlServiceImpl.findByEnName(pageConfig.getEnName());
 			if(pageUrls!=null&&pageUrls.size()>0){
 				//判断是否有效
 				//...
@@ -86,7 +86,7 @@ public class PageListServiceImpl implements PageListService{
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			e.printStackTrace();
-			throw new RestException(RestCode.DATATABLE_ERROR);
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
 		}
 		
 	}

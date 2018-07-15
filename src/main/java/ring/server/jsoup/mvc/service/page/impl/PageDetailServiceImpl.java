@@ -36,7 +36,7 @@ public class PageDetailServiceImpl implements PageDetailService{
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			e.printStackTrace();
-			throw new RestException(RestCode.DATATABLE_ERROR);
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
 		}
 	}
 
@@ -47,7 +47,7 @@ public class PageDetailServiceImpl implements PageDetailService{
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			e.printStackTrace();
-			throw new RestException(RestCode.DATATABLE_ERROR);
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
 		}
 	}
 
@@ -58,7 +58,7 @@ public class PageDetailServiceImpl implements PageDetailService{
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			e.printStackTrace();
-			throw new RestException(RestCode.DATATABLE_ERROR);
+			throw new RestException(RestCode.DATATABLE_ERROR,e);
 		}
 	}
 
