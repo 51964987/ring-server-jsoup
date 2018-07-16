@@ -16,9 +16,9 @@
 					<li  th:class="${url} eq '/config/*' ? 'dropDown dropDown_hover current' : 'dropDown dropDown_hover'" >
 						<a href="javascript:;" class="dropDown_A">数据源配置 <i class="Hui-iconfont">&#xe6d5;</i></a>
 						<ul class="dropDown-menu menu radius box-shadow">
-							<li><a  th:href="@{/config/index}">数据源管理</a></li>
-							<li><a  th:href="@{/config/list}">网站列表配置</a></li>
-							<li><a  th:href="@{/config/detail}">网站详情配置</a></li>
+							<li><a  th:href="@{/config/source/index}">数据源管理</a></li>
+							<li><a  th:href="@{/config/list/index}">数据列表配置</a></li>
+							<li><a  th:href="@{/config/detail/index}">数据详情配置</a></li>
 							<li>
 								<a href="/javascript:;">web工具箱<i class="arrow Hui-iconfont">&#xe6d7;</i></a>
 								<ul class="menu">

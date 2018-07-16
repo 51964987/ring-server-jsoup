@@ -87,7 +87,8 @@
 						if( $(this).attr("name") != "undefined"){
 							aoData.push({"name":$(this).attr("name"),"value":$(this).val()});
 						}
-					});				
+					});	
+			    	layer.load(2);
 					$.ajax({
 						"dataType":"json",
 						"type":"POST",
@@ -96,6 +97,7 @@
 						"success":fnCallback,
 						"error": function( xhr, textStatus, error ) {
 							$(".dataTables_processing").hide();
+							layer.closeAll('loading');
 						    page.handleAjaxError(xhr, textStatus, error);
 						}  
 					});

@@ -19,7 +19,7 @@ import org.springframework.util.StringUtils;
 import ring.server.jsoup.common.page.IListPage;
 import ring.server.jsoup.common.rest.RestException;
 import ring.server.jsoup.common.util.HttpUrlUtil;
-import ring.server.jsoup.mvc.model.page.PageConfig;
+import ring.server.jsoup.mvc.model.config.PageListConfig;
 import ring.server.jsoup.mvc.model.page.PageList;
 
 public class CommonListPage implements Callable<Object>,IListPage{
@@ -29,12 +29,12 @@ public class CommonListPage implements Callable<Object>,IListPage{
 	 * 分页--当前{page}页面
 	 */
 	private String url;
-	private PageConfig pageConfig;
+	private PageListConfig pageListConfig;
 	private List<PageList> list;
-	public CommonListPage(String url,PageConfig pageConfig,List<PageList> list) {
+	public CommonListPage(String url,PageListConfig pageListConfig,List<PageList> list) {
 		super();
 		this.url = url;
-		this.pageConfig = pageConfig;
+		this.pageListConfig = pageListConfig;
 		this.list = list;
 	}
 
@@ -46,9 +46,9 @@ public class CommonListPage implements Callable<Object>,IListPage{
 		
 		//获取最后一页
 		Integer lastPage = 1;
-		Element lastATag = doc.getElementById(pageConfig.getLastPageGet());
-		String href = lastATag.attr(pageConfig.getLastPageAttr());
-		Pattern p1 = Pattern.compile(pageConfig.getLastPagePattern());
+		Element lastATag = doc.getElementById(pageListConfig.getLastPageGet());
+		String href = lastATag.attr(pageListConfig.getLastPageAttr());
+		Pattern p1 = Pattern.compile(pageListConfig.getLastPagePattern());
 		Matcher m1 = p1.matcher(href);
 		if(m1.find()){
 			lastPage = Integer.valueOf(m1.group(1));
@@ -77,7 +77,7 @@ public class CommonListPage implements Callable<Object>,IListPage{
 				pageList.setAuthor(author.text());
 				pageList.setCreateDate(author.nextElementSibling()!=null?author.nextElementSibling().text():null);
 				pageList.setClickNum(tds.get(3).text());
-				pageList.setSource(pageConfig.getEnName());
+				pageList.setSource(pageListConfig.getId());
 				m.reset(pageList.getUrl());
 				if(m.find()){
 					pageList.setFid(m.group(1));

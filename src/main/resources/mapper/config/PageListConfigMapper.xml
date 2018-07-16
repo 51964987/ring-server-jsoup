@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ring.server.jsoup.mvc.dao.config.PageListConfigMapper">
+	
+	<select id="findById" resultMap="pageListConfigMap">
+		SELECT t.*
+		FROM page_list_config t
+		WHERE t.id=#{id}
+	</select>
+	
+	<delete id="delete">  
+        DELETE FROM page_list_config WHERE id=#{id};
+	</delete> 
+		
+	<update id="edit">  
+        UPDATE page_list_config 
+        SET cnName=#{cnName},isDownload=#{isDownload},localpath=#{localpath},lastPageGet=#{lastPageGet},
+        lastPageAttr=#{lastPageAttr},lastPagePattern=#{lastPagePattern},listUrlPattern=#{listUrlPattern},
+        detailUrlPattern=#{detailUrlPattern},imageAttr=#{imageAttr},imageGet=#{imageGet},magnetGet=#{magnetGet},
+        index=#{index},torrentGet=#{torrentGet},torrentPattern=#{torrentPattern} 
+        WHERE id=#{id}
+	</update> 
+	
+	<insert id="save">  
+        INSERT INTO page_list_config(
+        	id,cnName,isDownload,localpath,lastPageGet,lastPageAttr,lastPagePattern,
+        	listUrlPattern,detailUrlPattern,imageAttr,imageGet,magnetGet,index,torrentGet,torrentPattern
+        ) 
+        VALUES (
+        	#{id},#{cnName},#{isDownload},#{localpath},#{lastPageGet},#{lastPageAttr},#{lastPagePattern},
+        	#{listUrlPattern},#{detailUrlPattern},#{imageAttr},#{imageGet},#{magnetGet},#{index},#{torrentGet},#{torrentPattern}
+        )
+	</insert> 
+	
+	<select id="findList" resultType="ring.server.jsoup.mvc.model.config.PageListConfig" resultMap="pageListConfigMap">
+		SELECT t.*
+		FROM page_list_config t
+		WHERE 1 = 1
+		<if test=" id != null and id != '' ">
+			AND t.id like '%${id}%'
+		</if>
+	</select>
+	
+	<resultMap type="ring.server.jsoup.mvc.model.config.PageListConfig" id="pageListConfigMap">
+		<result property="id" column="id"/>
+		<result property="cnName" column="cnName"/>
+		<result property="isDownload" column="isDownload"/>
+		<result property="localpath" column="localpath"/>
+		<result property="lastPageGet" column="lastPageGet"/>
+		<result property="lastPageAttr" column="lastPageAttr"/>
+		<result property="lastPagePattern" column="lastPagePattern"/>
+		<result property="listUrlPattern" column="listUrlPattern"/>
+		<result property="detailUrlPattern" column="detailUrlPattern"/>
+		<result property="imageAttr" column="imageAttr"/>
+		<result property="imageGet" column="imageGet"/>
+		<result property="magnetGet" column="magnetGet"/>
+		<result property="index" column="index"/>
+		<result property="torrentGet" column="torrentGet"/>
+		<result property="torrentPattern" column="torrentPattern"/>
+	</resultMap>
+	
+</mapper>

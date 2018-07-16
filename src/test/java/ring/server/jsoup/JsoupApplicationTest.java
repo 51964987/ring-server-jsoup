@@ -15,9 +15,10 @@ import ring.server.jsoup.common.page.common.CommonListPage;
 import ring.server.jsoup.common.page.common.CommonPagination;
 import ring.server.jsoup.common.rest.RestException;
 import ring.server.jsoup.mvc.dao.page.PageListMapper;
+import ring.server.jsoup.mvc.model.config.PageListConfig;
 import ring.server.jsoup.mvc.model.page.PageConfig;
 import ring.server.jsoup.mvc.model.page.PageList;
-import ring.server.jsoup.mvc.service.page.impl.PageConfigServiceImpl;
+import ring.server.jsoup.mvc.service.config.impl.PageListConfigServiceImpl;
 import ring.server.jsoup.mvc.service.page.impl.PageDetailServiceImpl;
 
 @RunWith(SpringRunner.class)
@@ -27,18 +28,18 @@ public class JsoupApplicationTest {
 	@Autowired
 	PageDetailServiceImpl pageDetailServiceImpl;
 	@Autowired
-	PageConfigServiceImpl pageConfigServiceImpl;
+	PageListConfigServiceImpl pageListConfigServiceImpl;
 	@Autowired
 	PageListMapper pageListMapper;
 	
 
 	@Test
 	public void pageConfigTest(){
-		PageConfig pageConfig = new PageConfig();
+		PageListConfig pageConfig = new PageListConfig();
     	pageConfig.setDownload(false);
     	pageConfig.setLocalpath("F:/t66y");
     	pageConfig.setCnName("XXX");
-    	pageConfig.setEnName("T66Y");
+    	pageConfig.setId("T66Y");
     	pageConfig.setListUrlPattern("(https?://[[\\d\\w]+\\.]+/)thread0806.php\\?fid=(\\d+)&search=&page=(\\d+)");
     	pageConfig.setDetailUrlPattern("(htm_data/\\d+/\\d+/)(\\d+).html");
     	pageConfig.setImageAttr("data-src");
@@ -50,7 +51,7 @@ public class JsoupApplicationTest {
 		pageConfig.setIndex("");
 		
     	try {
-			pageConfigServiceImpl.add(pageConfig);
+			pageListConfigServiceImpl.save(pageConfig);
 		} catch (RestException e) {
 			e.printStackTrace();
 		}
@@ -64,8 +65,8 @@ public class JsoupApplicationTest {
 		
 		String url = "https://cl.wy8.info/htm_data/16/1807/3193734.html";
 		try {
-			PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
-			new CommonDetailPage(url,pageConfig,pageDetailServiceImpl).call();
+			PageListConfig pageListConfig = pageListConfigServiceImpl.findById("T66Y");
+			new CommonDetailPage(url,pageListConfig,pageDetailServiceImpl).call();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -77,9 +78,9 @@ public class JsoupApplicationTest {
 		
 		String url = "https://cl.wy8.info/thread0806.php?fid=7&search=&page=13";
 		try {
-			PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
+			PageListConfig pageListConfig = pageListConfigServiceImpl.findById("T66Y");
 			List<PageList> list = new ArrayList<>();
-			new CommonListPage(url,pageConfig,list).call();
+			new CommonListPage(url,pageListConfig,list).call();
 			if(list.size()>0){
 				System.out.println("批量插入或更新正式表");
 				pageListMapper.addList(list);
@@ -97,8 +98,8 @@ public class JsoupApplicationTest {
 		
 		String url = "https://cl.wy8.info/thread0806.php?fid=7&search=&page=1";
 		try {
-			PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
-			new CommonPagination(url,pageConfig,pageListMapper).call();
+			PageListConfig pageListConfig = pageListConfigServiceImpl.findById("T66Y");
+			new CommonPagination(url,pageListConfig,pageListMapper).call();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -110,8 +111,8 @@ public class JsoupApplicationTest {
 		
 		String url = "https://cl.wy8.info/index.php";
 		try {
-			PageConfig pageConfig = pageConfigServiceImpl.get("T66Y");
-			new CommonIndex(url,pageConfig,pageListMapper).call();
+			PageListConfig pageListConfig = pageListConfigServiceImpl.findById("T66Y");
+			new CommonIndex(url,pageListConfig,pageListMapper).call();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

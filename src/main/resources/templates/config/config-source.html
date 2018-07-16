@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/common-head :: onloadHead('数据源管理')"></head>
+<link rel="stylesheet" type="text/css" th:href="@{/ring-ui/css/ring-ui.css}" />
+<body>
+
+<header  th:replace="/common/common-header :: onloadHeader('/config/*')"></header>
+
+<nav class="breadcrumb">
+	<div class="container">
+		<i class="Hui-iconfont">&#xe67f;</i>
+		<a class="c-primary">首页</a>
+		<span class="c-gray en">&gt;</span>
+		<a>数据源管理</a>
+	</div>
+</nav>
+
+<div class="wap-container">
+	<div class="container">
+		<div class="row clearfix cases-list clearfix mt-10">
+			<form id="form_page"  method="POST" >
+			<div class="item col-xs-12 col-sm-6 col-md-4 col-lg-2 mb-5" style="padding-right: 0px">
+				<input type="text" style="width: 100%" name="enName" placeholder=" 输入关键字模糊查询" class="input-text">
+			</div>
+			<div class="item col-xs-12 col-sm-6 col-md-4 col-lg-3 mb-5">
+				<button class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索数据源</button>
+				<button class="btn btn-success" type="button" id="addBtn"><i class="Hui-iconfont">&#xe600;</i> 添加数据源</button>
+			</div>
+			</form>
+		</div>
+		<div class="row clearfix cases-list clearfix mb-10">
+			<div class="item col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<table class="table table-border table-bordered table-bg table-hover table-sort" style="width:100%">
+					<thead>
+						<tr class="text-c">
+							<th data-mDataProp="enName">数据源标识</th>
+							<th data-mDataProp="cnName">数据源名称</th>
+							<th data-mDataProp="domain">数据源URL</th>
+							<th data-mDataProp="oper">操作</th>
+						</tr>
+					</thead>
+					<tbody><tr class="odd"><td valign="top" colspan="8" class="dataTables_empty">表中数据为空</td></tr></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer th:replace="/common/common-footer :: onloadFooter"></footer>
+
+<div th:replace="/common/common-js :: onloadJS"></div>
+<div th:replace="/common/common-dataTables :: onloadDataTables('#form_page','.table-sort','list')"></div>
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/jquery.validate.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/validate-methods.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/messages_zh.min.js}"></script>
+</body>
+</html>

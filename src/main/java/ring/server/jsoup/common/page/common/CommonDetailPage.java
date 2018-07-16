@@ -16,7 +16,7 @@ import ring.server.jsoup.common.page.IDetailPage;
 import ring.server.jsoup.common.rest.RestException;
 import ring.server.jsoup.common.util.DownloadUtil;
 import ring.server.jsoup.common.util.HttpUrlUtil;
-import ring.server.jsoup.mvc.model.page.PageConfig;
+import ring.server.jsoup.mvc.model.config.PageListConfig;
 import ring.server.jsoup.mvc.model.page.PageDetail;
 import ring.server.jsoup.mvc.service.page.impl.PageDetailServiceImpl;
 
@@ -34,28 +34,28 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 	private String tid;
 	private String url;
 	private String title;
-	private PageConfig pageConfig;
+	private PageListConfig pageListConfig;
 	private PageDetailServiceImpl pageDetailServiceImpl;
 	
 	public CommonDetailPage(String fid, String curpage,String tid, String url,String title,
-			PageConfig pageConfig,PageDetailServiceImpl pageDetailServiceImpl) {
+			PageListConfig pageListConfig,PageDetailServiceImpl pageDetailServiceImpl) {
 		super();
 		this.fid = fid;
 		this.curpage = curpage;
 		this.tid = tid;
 		this.url = url;
 		this.title = title;
-		this.pageConfig = pageConfig;
+		this.pageListConfig = pageListConfig;
 		this.pageDetailServiceImpl = pageDetailServiceImpl;
 	}
 
-	public CommonDetailPage(String url,PageConfig pageConfig,PageDetailServiceImpl pageDetailServiceImpl) {
+	public CommonDetailPage(String url,PageListConfig pageListConfig,PageDetailServiceImpl pageDetailServiceImpl) {
 		super();
 		this.url = url;
 		this.fid = "0";
 		this.curpage = "0";
 		this.url = url;
-		this.pageConfig = pageConfig;
+		this.pageListConfig = pageListConfig;
 		this.pageDetailServiceImpl = pageDetailServiceImpl;
 	}
 
@@ -65,9 +65,9 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 		PageDetail pageDetail = new PageDetail();
 		pageDetail.setFid(fid);
 		pageDetail.setCurpage(curpage);
-		pageDetail.setSource(pageConfig.getEnName());
+		pageDetail.setSource(pageListConfig.getId());
 		pageDetail.setTs(new Date(System.currentTimeMillis()));
-		pageDetail.setSource(pageConfig.getEnName());
+
 		
 		//线程名称
 		Thread.currentThread().setName("FID_"+fid+"_PAGE_"+curpage+"_TID="+tid);
@@ -75,16 +75,16 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 
 		try {
 			
-	    	if(StringUtils.isEmpty(pageConfig.getDetailUrlPattern())){
+	    	if(StringUtils.isEmpty(pageListConfig.getDetailUrlPattern())){
 	    		throw new Exception("detailUrlPattern is null");
 	    	}
-	    	if(StringUtils.isEmpty(pageConfig.getImageGet())){
+	    	if(StringUtils.isEmpty(pageListConfig.getImageGet())){
 	    		throw new Exception("imageGet is null");
 	    	}
-	    	if(StringUtils.isEmpty(pageConfig.getImageAttr())){
+	    	if(StringUtils.isEmpty(pageListConfig.getImageAttr())){
 	    		throw new Exception("imageAttr is null");
 	    	}
-	    	if(StringUtils.isEmpty(pageConfig.getMagnetGet())){
+	    	if(StringUtils.isEmpty(pageListConfig.getMagnetGet())){
 	    		throw new Exception("magnetGet is null");
 	    	}
 			
@@ -105,7 +105,7 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 			
 			//1.来源页面
 			String targetFold = "";
-			Pattern p = Pattern.compile(pageConfig.getDetailUrlPattern());
+			Pattern p = Pattern.compile(pageListConfig.getDetailUrlPattern());
 			Matcher m = p.matcher(url);
 			
 			if(m.find()){
@@ -120,7 +120,7 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 			
 			//指定下载目录
 			String rootFile = null;
-			if(StringUtils.isEmpty(pageConfig.getLocalpath())){				
+			if(StringUtils.isEmpty(pageListConfig.getLocalpath())){				
 				//默认最后一个盘符
 				File[] roots = File.listRoots();
 				for(int i=roots.length-1;i>0;i--){
@@ -130,20 +130,20 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 					}
 				}
 			}else{
-				rootFile = pageConfig.getLocalpath();
+				rootFile = pageListConfig.getLocalpath();
 			}
 			
 			String outputpath = rootFile+targetFold+(StringUtils.isEmpty(pageDetail.getSort())?"":"\\"+pageDetail.getSort()+"\\")+"\\";//+title+"\\";
 			
 			//3.图片下载
 			DownloadUtil jsoupUtil = new DownloadUtil();
-			String[] gets = pageConfig.getImageGet().split(",");
+			String[] gets = pageListConfig.getImageGet().split(",");
 			StringBuffer imagesSb = new StringBuffer();
 			for(String get : gets){				
 				Elements imgs = doc.getElementsByTag(get);
-				String[] attrs = pageConfig.getImageAttr().split(",");
+				String[] attrs = pageListConfig.getImageAttr().split(",");
 				for(String attr : attrs){						
-					String images = jsoupUtil.imagesText(imgs,attr, outputpath,pageConfig.isDownload() );
+					String images = jsoupUtil.imagesText(imgs,attr, outputpath,pageListConfig.isDownload() );
 					if(images!=null&&images.length()>0){						
 						if(imagesSb.length()>0){
 							imagesSb.append("\t\n");
@@ -155,13 +155,13 @@ public class CommonDetailPage implements Callable<PageDetail>,IDetailPage {
 			pageDetail.setImages(imagesSb.toString());
 			
 			//4.磁力链接下载
-			Elements as = doc.getElementsByTag(pageConfig.getMagnetGet());
-			String magnet = jsoupUtil.elementsText(as, outputpath+"\\magnet.txt",Pattern.compile("magnet.*"),pageConfig.isDownload());
+			Elements as = doc.getElementsByTag(pageListConfig.getMagnetGet());
+			String magnet = jsoupUtil.elementsText(as, outputpath+"\\magnet.txt",Pattern.compile("magnet.*"),pageListConfig.isDownload());
 			pageDetail.setMagnet(magnet);
 			
 			//种子链接下载
-			Elements torrentAs = doc.getElementsByTag(pageConfig.getTorrentGet());
-			String torrent = jsoupUtil.elementsText(torrentAs, outputpath+"\\torrent.txt",Pattern.compile("http\\://www\\.viidii\\.info.*"),pageConfig.isDownload());
+			Elements torrentAs = doc.getElementsByTag(pageListConfig.getTorrentGet());
+			String torrent = jsoupUtil.elementsText(torrentAs, outputpath+"\\torrent.txt",Pattern.compile("http\\://www\\.viidii\\.info.*"),pageListConfig.isDownload());
 			pageDetail.setTorrent(torrent);
 			
 			//保存到数据库

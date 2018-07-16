@@ -13,20 +13,20 @@ import org.slf4j.LoggerFactory;
 import ring.server.jsoup.common.page.IPagination;
 import ring.server.jsoup.common.util.HttpUrlUtil;
 import ring.server.jsoup.mvc.dao.page.PageListMapper;
-import ring.server.jsoup.mvc.model.page.PageConfig;
+import ring.server.jsoup.mvc.model.config.PageListConfig;
 import ring.server.jsoup.mvc.model.page.PageList;
 
 public class CommonPagination implements IPagination{
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	private String url;
-	private PageConfig pageConfig;
+	private PageListConfig pageListConfig;
 	private PageListMapper pageListMapper;
 	
-	public CommonPagination(String url, PageConfig pageConfig,PageListMapper pageListMapper) {
+	public CommonPagination(String url, PageListConfig pageListConfig,PageListMapper pageListMapper) {
 		super();
 		this.url = url;
-		this.pageConfig = pageConfig;
+		this.pageListConfig = pageListConfig;
 		this.pageListMapper = pageListMapper;
 	}
 
@@ -40,9 +40,9 @@ public class CommonPagination implements IPagination{
 			//Document doc = Jsoup.connect(url).get();
 			Document doc = HttpUrlUtil.get(url);
 			
-			Element lastATag = doc.getElementById(pageConfig.getLastPageGet());
-			String href = lastATag.attr(pageConfig.getLastPageAttr());
-			Pattern p = Pattern.compile(pageConfig.getLastPagePattern());
+			Element lastATag = doc.getElementById(pageListConfig.getLastPageGet());
+			String href = lastATag.attr(pageListConfig.getLastPageAttr());
+			Pattern p = Pattern.compile(pageListConfig.getLastPagePattern());
 			Matcher m = p.matcher(href);
 			Integer lastPage = 1;
 			if(m.find()){
@@ -63,7 +63,7 @@ public class CommonPagination implements IPagination{
 				if(m.find()){
 					m.appendReplacement(urlSb, "page="+i);
 				}
-				new CommonListPage(urlSb.toString(),pageConfig,list).call();
+				new CommonListPage(urlSb.toString(),pageListConfig,list).call();
 				if(list.size()>0){
 					logger.info("批量插入数据"+list.size()+"条");
 					pageListMapper.addList(list);

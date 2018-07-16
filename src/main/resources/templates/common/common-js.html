@@ -40,57 +40,29 @@
 			var _this = this;
 			//返回首页
 			$.Huitotop();
-			/*左右滑动菜单*/
-		    /* $(".JS-nav-toggle").click(function() {
-				$("body").addClass('sideBox-open');
-		        $(".containBox-bg").height(_bodyHeight).show();
-		    });
-		    $(".containBox-bg").click(function() {
-				$(this).hide();
-				$("body").removeClass('sideBox-open');
-		    }); */
-			//Echart
 			var _pageObject = this;
 			$.ajaxSetup({
 				cache: false,
 		        timeout: 600000,
 				beforeSend:function(){
-					_pageObject.openEchartLoadingEvent();
+					layer.load(2);
 				},
 				complete:function(data){
-					_pageObject.closeEchartLoadingEvent();
+					layer.closeAll('loading');
 				},
 				error:function(xhr, textStatus, error){
-					_pageObject.closeEchartLoadingEvent();
-					//console.info(e);
-					///alert(e.statusText);
-					///alert(e.responseText);
+					_pageObject.handleAjaxError( xhr, textStatus, error);
 				}
 			});
 		},
 		handleAjaxError:function( xhr, textStatus, error){
+			layer.closeAll('loading');
 			if ( textStatus === 'timeout' ) {  
 				layer.alert( 'The server took too long to send the data.' );  
 		    }else {  
 		        //alert( 'An error occurred on the server. Please try again in a minute.' );
 		        layer.alert(xhr.responseText); 
 		    }	
-		},
-		openEchartLoadingEvent:function(data){
-			$("[data-dom='echarts']").each(function(){
-				var echartInstance = echarts.getInstanceByDom($(this)[0]);
-				if(echartInstance != null){
-					echartInstance.showLoading();
-				}
-			});
-		},
-		closeEchartLoadingEvent:function(data){
-			$("[data-dom='echarts']").each(function(){
-				var echartInstance = echarts.getInstanceByDom($(this)[0]);
-				if(echartInstance != null){
-					echartInstance.hideLoading();
-				}
-			});
 		},
 		waterMarkEvent:function(data){//水印
 			var waterMarkText = 'RING'+new Date().Format("yyyyMMdd");

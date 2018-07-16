@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="ring.server.jsoup.mvc.dao.page.PageDetailMapper">
 
+	<cache
+         eviction="FIFO"
+         flushInterval="60000"
+         size="512"
+         readOnly="true"/>
+         
 	<insert id="add" parameterType="ring.server.jsoup.mvc.model.page.PageDetail">
 		REPLACE INTO page_detail (id,title,content,images,magnet,torrent,url,source,ts)
 		VALUES(#{id},#{title},#{content},#{images},#{magnet},#{torrent},#{url},#{source},#{ts})

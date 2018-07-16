@@ -2,8 +2,8 @@ package ring.server.jsoup.mvc.controller.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.ibatis.executor.ResultExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,38 +13,38 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 import ring.server.jsoup.common.rest.RestException;
 import ring.server.jsoup.mvc.model.page.PageIndex;
 import ring.server.jsoup.mvc.model.page.PageUrl;
 import ring.server.jsoup.mvc.service.page.impl.PageIndexServiceImpl;
 import ring.server.jsoup.mvc.service.page.impl.PageUrlServiceImpl;
+import ring.server.jsoup.mvc.utils.DataTableResultHelper;
 
 @Controller
-@RequestMapping("config")
-public class ConfigController {
+@RequestMapping("config/source")
+public class DataSourceConfigController {
 	
 	@Autowired
 	PageIndexServiceImpl pageIndexServiceImpl;
 	@Autowired
 	PageUrlServiceImpl pageUrlServiceImpl;
 	
-	@RequestMapping("index")
-	public ModelAndView index(){
-		return new ModelAndView("config/index");
-	}
-	
 	@RequestMapping(value="edit/{enName}",method=RequestMethod.GET)
 	public ModelAndView edit(@PathVariable("enName")String enName) throws RestException{
-		ModelAndView model = new ModelAndView("config/index-oper");
+		ModelAndView model = new ModelAndView("config/config-source-oper");
 		PageIndex pageIndex = pageIndexServiceImpl.findByEnName(enName);
 		model.addObject("DATA", pageIndex);
 		if(!StringUtils.isEmpty(pageIndex.getDomain())){			
 			model.addObject("domains", pageIndex.getDomain().split(","));
 		}
-		model.addObject("url", "/config/edit");
+		model.addObject("url", "/config/source/edit");
 		return model;
 	}
 	
@@ -70,8 +70,8 @@ public class ConfigController {
 	
 	@RequestMapping(value="add",method=RequestMethod.GET)
 	public ModelAndView add(){
-		ModelAndView model = new ModelAndView("config/index-oper");
-		model.addObject("url", "/config/add");
+		ModelAndView model = new ModelAndView("config/config-source-oper");
+		model.addObject("url", "/config/source/add");
 		return model;
 	}
 
@@ -99,14 +99,28 @@ public class ConfigController {
 	public Object delete(@PathVariable("id") String id) throws RestException{
 		return new ResponseEntity<>(pageIndexServiceImpl.delete(id), HttpStatus.OK);
 	}
-		
-	@RequestMapping("list")
-	public ModelAndView list(){
-		return new ModelAndView("config/list");
-	}
 	
-	@RequestMapping("detail")
-	public ModelAndView detail(){
-		return new ModelAndView("config/detail");
+
+	@ResponseBody
+	@RequestMapping(value="list",method=RequestMethod.POST)
+	public Object findList(
+			@RequestParam(required=false)Integer sEcho,
+			@RequestParam(required=false)Integer iDisplayStart,
+			@RequestParam(required=false)Integer iDisplayLength,
+			PageIndex pageIndex
+			)throws RestException{
+		
+		Map<String, Object> map = null;
+		PageHelper.offsetPage(iDisplayStart, iDisplayLength, true);
+		List<PageIndex> list = pageIndexServiceImpl.findList(pageIndex);
+		PageInfo<PageIndex> pageInfo = new PageInfo<>(list);
+		map = DataTableResultHelper.dataTableResult(sEcho+1, pageInfo);
+				
+		return new ResponseEntity<>(map, HttpStatus.OK);
+	}
+
+	@RequestMapping("index")
+	public ModelAndView index(){
+		return new ModelAndView("config/config-source");
 	}
 }

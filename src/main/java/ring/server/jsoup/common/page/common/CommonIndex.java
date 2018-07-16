@@ -11,19 +11,19 @@ import org.slf4j.LoggerFactory;
 import ring.server.jsoup.common.page.IPagination;
 import ring.server.jsoup.common.util.HttpUrlUtil;
 import ring.server.jsoup.mvc.dao.page.PageListMapper;
-import ring.server.jsoup.mvc.model.page.PageConfig;
+import ring.server.jsoup.mvc.model.config.PageListConfig;
 
 public class CommonIndex implements IPagination{
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	private String url;
-	private PageConfig pageConfig;
+	private PageListConfig pageListConfig;
 	private PageListMapper pageListMapper;
 	
-	public CommonIndex(String url, PageConfig pageConfig,PageListMapper pageListMapper) {
+	public CommonIndex(String url, PageListConfig pageListConfig,PageListMapper pageListMapper) {
 		super();
 		this.url = url;
-		this.pageConfig = pageConfig;
+		this.pageListConfig = pageListConfig;
 		this.pageListMapper = pageListMapper;
 	}
 
@@ -47,7 +47,7 @@ public class CommonIndex implements IPagination{
 					String url = paginations.get(i).child(0).attr("href");
 					if(url.startsWith("thread0806")){
 						url=rootUrl+url+"&search=&page=1";
-						new CommonPagination(url,pageConfig,pageListMapper).call();
+						new CommonPagination(url,pageListConfig,pageListMapper).call();
 					}
 				}
 			}else{

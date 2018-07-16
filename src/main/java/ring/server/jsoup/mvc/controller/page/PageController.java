@@ -23,11 +23,11 @@ import ring.server.jsoup.common.page.common.CommonListPage;
 import ring.server.jsoup.common.page.common.CommonPagination;
 import ring.server.jsoup.common.rest.RestException;
 import ring.server.jsoup.mvc.dao.page.PageListMapper;
-import ring.server.jsoup.mvc.model.page.PageConfig;
+import ring.server.jsoup.mvc.model.config.PageListConfig;
 import ring.server.jsoup.mvc.model.page.PageDetail;
 import ring.server.jsoup.mvc.model.page.PageList;
 import ring.server.jsoup.mvc.model.page.PageUrl;
-import ring.server.jsoup.mvc.service.page.impl.PageConfigServiceImpl;
+import ring.server.jsoup.mvc.service.config.impl.PageListConfigServiceImpl;
 import ring.server.jsoup.mvc.service.page.impl.PageDetailServiceImpl;
 import ring.server.jsoup.mvc.service.page.impl.PageListServiceImpl;
 import ring.server.jsoup.mvc.service.page.impl.PageUrlServiceImpl;
@@ -40,7 +40,7 @@ public class PageController {
 	@Autowired
 	PageDetailServiceImpl pageDetailServiceImpl;
 	@Autowired
-	PageConfigServiceImpl pageConfigServiceImpl;
+	PageListConfigServiceImpl pageListConfigServiceImpl;
 	
 	@Autowired
 	PageListServiceImpl  pageListServiceImpl ;
@@ -103,17 +103,17 @@ public class PageController {
 			PageInfo<PageList> pageInfo = new PageInfo<>(list);
 			map = DataTableResultHelper.dataTableResult(sEcho+1, pageInfo);
 		}else if("2".equals(server)){	
-			PageConfig pageConfig = pageConfigServiceImpl.get(source);
+			PageListConfig pageListConfig = pageListConfigServiceImpl.findById(source);
 			//目标服务器
 			String url = null;
-			List<PageUrl> pageUrls = pageUrlServiceImpl.findByEnName(pageConfig.getId());
+			List<PageUrl> pageUrls = pageUrlServiceImpl.findByEnName(pageListConfig.getId());
 			if(pageUrls!=null&&pageUrls.size()>0){
 				//判断是否有效
 				//...
 				url = pageUrls.get(0).getUrl();
 			}
 			List<PageList> list = new ArrayList<>();
-			int lastPage = (int) new CommonListPage(url+modelUrl,pageConfig,list).call();
+			int lastPage = (int) new CommonListPage(url+modelUrl,pageListConfig,list).call();
 			map = DataTableResultHelper.dataTableResult(sEcho+1, list,lastPage);
 		}
 				
@@ -125,15 +125,15 @@ public class PageController {
 			@RequestParam(required=false)String server,
 			@RequestParam(required=false)String modelUrl,
 			@RequestParam(required=false)String source)throws RestException{
-		PageConfig pageConfig = pageConfigServiceImpl.get(source);
+		PageListConfig pageListConfig = pageListConfigServiceImpl.findById(source);
 		String url = null;
-		List<PageUrl> pageUrls = pageUrlServiceImpl.findByEnName(pageConfig.getId());
+		List<PageUrl> pageUrls = pageUrlServiceImpl.findByEnName(pageListConfig.getId());
 		if(pageUrls!=null&&pageUrls.size()>0){
 			//判断是否有效
 			//...
 			url = pageUrls.get(0).getUrl();
 		}
-		new CommonPagination(url+modelUrl,pageConfig,pageListMapper).call();
+		new CommonPagination(url+modelUrl,pageListConfig,pageListMapper).call();
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
